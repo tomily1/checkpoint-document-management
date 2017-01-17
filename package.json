@@ -1,0 +1,26 @@
+{
+  "name": "dms_api",
+  "version": "1.0.0",
+  "description": "An Application Programming interface for document management",
+  "main": "index.js",
+  "scripts": {
+    "test": "\n specify test here"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andela-tisrael/checkpoint-document-management.git"
+  },
+  "keywords": [
+    "api",
+    "management"
+  ],
+  "author": "Israel Tomilayo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andela-tisrael/checkpoint-document-management/issues"
+  },
+  "homepage": "https://github.com/andela-tisrael/checkpoint-document-management#readme",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

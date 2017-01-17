@@ -1,0 +1,36 @@
+{
+  "extends": "airbnb",
+  "root": true,
+  "env": {
+    "node": true,
+    "es6": true,
+    "mocha": true
+  },
+  "globals": {
+    "amd": true,
+    "commonjs": true
+  },
+  "rules": {
+    "one-var": 0,
+    "one-var-declaration-per-line": 0,
+    "new-cap": 0,
+    "arrow-body-style": [0, "as-needed"],
+    "consistent-return": 0,
+    "no-param-reassign": 0,
+    "comma-dangle": 0,
+    "no-shadow": [ 1, { "allow": [ "req", "res", "err" ] } ],
+    "valid-jsdoc": [ 2, {
+      "requireReturn": true,
+      "requireReturnType": true,
+      "requireParamDescription": false,
+      "requireReturnDescription": true
+    } ],
+    "require-jsdoc": [ 2, {
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true
+      }
+    } ]
+  }
+}
