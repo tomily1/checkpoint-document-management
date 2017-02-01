@@ -4,6 +4,7 @@
   "description": "An Application Programming interface for document management",
   "main": "index.js",
   "scripts": {
+    "start": "./node_modules/.bin/nodemon ./bin/www",
     "test": "\n specify test here"
   },
   "repository": {
