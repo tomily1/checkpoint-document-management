@@ -11,4 +11,40 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+  //************************//
+ //-----Controllers--------//
+//************************//
+const documentController = require('./server/app/controllers/').documents;
+const userController = require('./server/app/controllers/').users;
+
+
+
+  //************************//
+ //-----Routes-------------//
+//************************//
+
+  //=========================//            //
+ //==    User Routes      ==//============//
+//=========================//            //
+app.post('/user', userController.create);
+app.get('/user', userController.index);
+
+  //=========================//            //
+ //== Document Routes     ==//============//
+//=========================//            //
+app.post('/document', documentController.create);
+app.get('/document', documentController.index);
+
+
+
+  //=========================//            //
+ //==    Catch All Route  ==//============//
+//=========================//            //
+app.get('*', (req,res) => {
+    res.status(200).send({
+        "message": "welcome"
+    });
+});
+
 module.exports = app;
