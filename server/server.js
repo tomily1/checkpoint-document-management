@@ -3,8 +3,9 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 
 // setup the app
-var app = express();
-var router = express.Router();
+const app = express();
+const router = express.Router();
+const port = parseInt(process.env.PORT, 10) || 9000;
 app.use(logger('dev'));
 
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
@@ -15,8 +16,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
   //************************//
  //-----Controllers--------//
 //************************//
-const documentController = require('./server/app/controllers/').documents;
-const userController = require('./server/app/controllers/').users;
+// const documentController = require('./app/controllers/').documents;
+// const userController = require('./app/controllers/').users;
+import DocumentController from './controllers/documentController';
+import UserController from './controllers/userController';
 
 
 
@@ -27,14 +30,14 @@ const userController = require('./server/app/controllers/').users;
   //=========================//            //
  //==    User Routes      ==//============//
 //=========================//            //
-app.post('/user', userController.create);
-app.get('/user', userController.index);
+app.post('/user', UserController.createUser);
+app.get('/user', UserController.fetchUser);
 
   //=========================//            //
  //== Document Routes     ==//============//
 //=========================//            //
-app.post('/document', documentController.create);
-app.get('/document', documentController.index);
+app.post('/document', DocumentController.createDocument);
+app.get('/document', DocumentController.fetchDocument);
 
 
 
@@ -47,4 +50,7 @@ app.get('*', (req,res) => {
     });
 });
 
-module.exports = app;
+app.listen(port, () => {
+  console.log('App running on port ',port);
+})
+export default app;
