@@ -43,7 +43,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //==    User Routes      ==//============//
 //=========================//            //
 app.post('/user', _userController2.default.createUser);
-app.get('/user', _userController2.default.fetchUser);
+app.get('/user/:id', _userController2.default.fetchUser);
 
 //=========================//            //
 //== Document Routes     ==//============//

@@ -1,4 +1,3 @@
-// var Documents = require('../models/documents');
 import db from '../models';
 
 const Documents = db.documents;
@@ -41,7 +40,6 @@ class DocumentController {
      * 
      */
     static fetchDocument(request, response) {
-       // console.dir(Documents);
         Documents.findAll({})
             .then(document => {
                 if (document) {
@@ -58,24 +56,3 @@ class DocumentController {
 
 }
 export default DocumentController;
-
-// module.exports = {
-//     create (req, res){
-//         return Documents
-//             .create({
-//                 title: req.body.title,
-//                 content: req.body.content,
-//                 access: req.body.access,
-//                 OwnerId: req.body.oId,
-//             })
-//             .then(document => res.status(201).send(document))
-//             .catch(error => res.status(401).send(error));
-
-//     },
-//     index (req, res) {
-//         return Documents 
-//             .all()
-//             .then(document => res.status(201).send(document))
-//             .catch(error => res.status(401).send(error));
-//     }
-// }

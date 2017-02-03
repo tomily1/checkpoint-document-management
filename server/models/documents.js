@@ -1,6 +1,6 @@
 'use strict';
-module.exports = function(sequelize, DataTypes) {
-  var documents = sequelize.define('documents', {
+module.exports = (sequelize, DataTypes) => {
+  const documents = sequelize.define('documents', {
     title: {
       allowNull: false,
       type:DataTypes.STRING
@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     classMethods: {
-      associate: function(models) {
+      associate: (models) => {
         // associations can be defined here
       }
     }

@@ -31,7 +31,7 @@ import UserController from './controllers/userController';
  //==    User Routes      ==//============//
 //=========================//            //
 app.post('/user', UserController.createUser);
-app.get('/user', UserController.fetchUser);
+app.get('/user/:id', UserController.fetchUser);
 
   //=========================//            //
  //== Document Routes     ==//============//

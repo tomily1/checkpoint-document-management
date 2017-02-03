@@ -4,8 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // var Documents = require('../models/documents');
-
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _models = require('../models');
 
@@ -63,7 +62,6 @@ var DocumentController = function () {
     }, {
         key: 'fetchDocument',
         value: function fetchDocument(request, response) {
-            // console.dir(Documents);
             Documents.findAll({}).then(function (document) {
                 if (document) {
                     response.status(201).send(document);
@@ -83,24 +81,3 @@ var DocumentController = function () {
 }();
 
 exports.default = DocumentController;
-
-// module.exports = {
-//     create (req, res){
-//         return Documents
-//             .create({
-//                 title: req.body.title,
-//                 content: req.body.content,
-//                 access: req.body.access,
-//                 OwnerId: req.body.oId,
-//             })
-//             .then(document => res.status(201).send(document))
-//             .catch(error => res.status(401).send(error));
-
-//     },
-//     index (req, res) {
-//         return Documents 
-//             .all()
-//             .then(document => res.status(201).send(document))
-//             .catch(error => res.status(401).send(error));
-//     }
-// }

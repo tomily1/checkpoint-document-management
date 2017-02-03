@@ -6,9 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _models = require('../models');
+
+var _models2 = _interopRequireDefault(_models);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Users = require('../models/users');
+var Users = _models2.default.users;
 
 var UserController = function () {
   function UserController() {
@@ -74,26 +80,3 @@ var UserController = function () {
 }();
 
 exports.default = UserController;
-
-// module.exports = {
-//     create (req, res){
-//         return Users
-//             .create({
-//                 username: req.body.username,
-//                 firstName: req.body.fname,
-//                 lastName: req.body.lname,
-//                 password: req.body.pword,
-//                 email: req.body.email,
-//                 RoleId: req.body.rId,
-//             })
-//             .then(user => res.status(201).send(user))
-//             .catch(error => res.status(401).send(error));
-//     },
-//     index(req, res) {
-//         return Users
-//             .all()
-//             .then(user => res.status(201).send(user))
-//             .catch(error => res.status(401).send(error));
-
-//     }
-// }
