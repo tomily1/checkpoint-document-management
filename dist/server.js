@@ -21,7 +21,7 @@ var bodyParser = require('body-parser');
 // setup the app
 var app = express();
 var router = express.Router();
-var port = parseInt(process.env.PORT, 10) || 9000;
+var port = parseInt(process.env.PORT, 10) || 3000;
 app.use(logger('dev'));
 
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
@@ -31,8 +31,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //************************//
 //-----Controllers--------//
 //************************//
-// const documentController = require('./app/controllers/').documents;
-// const userController = require('./app/controllers/').users;
 
 
 //************************//
@@ -44,6 +42,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //=========================//            //
 app.post('/user', _userController2.default.createUser);
 app.get('/user/:id', _userController2.default.fetchUser);
+app.get('/users', _userController2.default.fetchAllUsers);
+app.delete('/users/:id', _userController2.default.deleteUser);
+app.put('/users/:id', _userController2.default.updateUser);
 
 //=========================//            //
 //== Document Routes     ==//============//

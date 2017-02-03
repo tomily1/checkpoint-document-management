@@ -25,13 +25,17 @@ var DocumentController = function () {
         key: 'postRequest',
 
         /**
-         * 
+         * Method to set the various document routes
+         * @param{Object} app - Express app
+         * @return{Void}
          */
         value: function postRequest(request) {
             return request.body && request.body.title && request.body.content && request.body.access && request.body.OwnerIds;
         }
         /**
-         * 
+         * Method used to create new Document for a particular user
+         * @param{Object} app - Express app
+         * @returns{response data}
          */
 
     }, {
@@ -56,6 +60,9 @@ var DocumentController = function () {
             }
         }
         /**
+         * Method used to fetch documents for all users
+         * @param{Object} app - Express app
+         * @returns{response data}
          * 
          */
 

@@ -4,7 +4,9 @@ const Documents = db.documents;
 
 class DocumentController {
     /**
-     * 
+     * Method to set the various document routes
+     * @param{Object} app - Express app
+     * @return{Void}
      */
     static postRequest(request) {
         return (
@@ -16,7 +18,9 @@ class DocumentController {
         )
     }
     /**
-     * 
+     * Method used to create new Document for a particular user
+     * @param{Object} app - Express app
+     * @returns{response data}
      */
     static createDocument(request, response) {
         if (DocumentController.postRequest(request)) {
@@ -37,6 +41,9 @@ class DocumentController {
         }
     }
     /**
+     * Method used to fetch documents for all users
+     * @param{Object} app - Express app
+     * @returns{response data}
      * 
      */
     static fetchDocument(request, response) {
