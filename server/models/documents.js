@@ -18,7 +18,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        // associations can be defined here
+        documents.belongsTo(models.users,{
+          as: 'Owner',
+          onDelete: 'CASCADE',
+          foreignKey:{
+            allowNull: false
+          }
+        })
       }
     }
   });

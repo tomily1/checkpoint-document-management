@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 // setup the app
 const app = express();
 const router = express.Router();
-const port = parseInt(process.env.PORT, 10) || 3000;
+const port = parseInt(process.env.PORT, 10) || 8000;
 app.use(logger('dev'));
 
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
@@ -18,12 +18,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //************************//
 import DocumentController from './controllers/documentController';
 import UserController from './controllers/userController';
+import RoleController from './controllers/roleController';
 
 
 
   //************************//
  //-----Routes-------------//
 //************************//
+
+  //=========================//            //
+ //== Roles Routes        ==//============//
+//=========================//            //
+app.post('/roles', RoleController.createRole);
+app.get('/roles', RoleController.fetchRoles);
+app.delete('/roles/:id', RoleController.deleteRole);
 
   //=========================//            //
  //==    User Routes      ==//============//

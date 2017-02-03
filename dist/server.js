@@ -12,6 +12,10 @@ var _userController = require('./controllers/userController');
 
 var _userController2 = _interopRequireDefault(_userController);
 
+var _roleController = require('./controllers/roleController');
+
+var _roleController2 = _interopRequireDefault(_roleController);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var express = require('express');
@@ -21,7 +25,7 @@ var bodyParser = require('body-parser');
 // setup the app
 var app = express();
 var router = express.Router();
-var port = parseInt(process.env.PORT, 10) || 3000;
+var port = parseInt(process.env.PORT, 10) || 8000;
 app.use(logger('dev'));
 
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
@@ -36,6 +40,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //************************//
 //-----Routes-------------//
 //************************//
+
+//=========================//            //
+//== Roles Routes        ==//============//
+//=========================//            //
+app.post('/roles', _roleController2.default.createRole);
+app.get('/roles', _roleController2.default.fetchRoles);
+app.delete('/roles/:id', _roleController2.default.deleteRole);
 
 //=========================//            //
 //==    User Routes      ==//============//

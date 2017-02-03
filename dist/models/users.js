@@ -28,7 +28,12 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function associate(models) {
-        // associations can be defined here
+        users.belongsTo(models.Role, {
+          foreignKey: 'RoleId'
+        });
+        users.hasMany(models.documents, {
+          foreignKey: 'OwnerId'
+        });
       }
     }
   });

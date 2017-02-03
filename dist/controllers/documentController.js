@@ -30,7 +30,7 @@ var DocumentController = function () {
          * @return{Void}
          */
         value: function postRequest(request) {
-            return request.body && request.body.title && request.body.content && request.body.access && request.body.OwnerIds;
+            return request.body && request.body.title && request.body.content && request.body.access && request.body.OwnerId;
         }
         /**
          * Method used to create new Document for a particular user
@@ -46,7 +46,7 @@ var DocumentController = function () {
                     title: request.body.title,
                     content: request.body.content,
                     access: request.body.access,
-                    OwnerId: request.body.oId
+                    OwnerId: request.body.OwnerId
                 }).then(function (document) {
                     return response.status(201).send(document);
                 }).catch(function (error) {

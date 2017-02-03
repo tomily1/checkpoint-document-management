@@ -14,7 +14,7 @@ class DocumentController {
             request.body.title &&
             request.body.content &&
             request.body.access &&
-            request.body.OwnerIds
+            request.body.OwnerId
         )
     }
     /**
@@ -29,7 +29,7 @@ class DocumentController {
                     title: request.body.title,
                     content: request.body.content,
                     access: request.body.access,
-                    OwnerId: request.body.oId,
+                    OwnerId: request.body.OwnerId,
                 })
                 .then(document => response.status(201).send(document))
                 .catch(error => response.status(401).send(error));
