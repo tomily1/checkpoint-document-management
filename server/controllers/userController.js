@@ -1,5 +1,7 @@
 import db from '../models';
+import jwt from 'jsonwebtoken';
 const Users = db.users;
+const SECRET_KEY = process.env.SECRET || 'secret';
 
 class UserController {
   /**
@@ -36,7 +38,7 @@ class UserController {
         })
         .then(user => response.status(201).send(user))
         .catch(error => response.status(401).send(error));
-     }
+    }
   }
   /**
    * 
@@ -120,6 +122,37 @@ class UserController {
           error
         });
       });
+  }
+  /**
+   * 
+   */
+  static loginUser(request, response) {
+    Users.findOne({where:{email: request.body.email}})
+      .then(user => {
+         if(user && user.validPassword(request.body.password)){
+          const token = jwt.sign({
+            RoleId: user.RoleId,
+            UserId: user.id
+          }, SECRET_KEY, { expiresIn: 86400 });
+          response.status(201).send({token, expiresIn: 86400})
+        } else {
+          response.status(401).send({
+            success: false,
+            message: 'Failed to Authenticate User, Invalid Password or Email'
+          })
+        }
+      })
+      .catch(error => response.status(404).send({
+        message: 'Error!'
+      }));
+  }
+  /**
+   * 
+   */
+  static logoutUser(request, response) {
+    response.send({
+      message: 'User logged out successfully'
+    })
   }
 }
 export default UserController;

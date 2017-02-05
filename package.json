@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "./node_modules/.bin/nodemon ./bin/www",
-    "dev" : "./node_modules/gulp/bin/gulp.js develop_server",
+    "dev": "./node_modules/gulp/bin/gulp.js develop_server",
     "test": "\n specify test here"
   },
   "repository": {
@@ -43,6 +43,7 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.0",
     "express": "^4.14.1",
     "jsonwebtoken": "^7.2.1",

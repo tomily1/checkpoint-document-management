@@ -1,6 +1,7 @@
-// fetch dependencies
 import jwt from 'jsonwebtoken';
-const SECRET_KEY = 'jwt_cp2_dms';
+import db from '../models';
+
+const SECRET_KEY = process.env.SECRET || 'secret';
 /**
  * Class to implement authentication middlewares
  */
@@ -16,7 +17,7 @@ class Authenticator {
     if (token) {
       jwt.verify(token, SECRET_KEY, (error, decoded) => {
         if (error) {
-          response.status(401).json({ 
+          response.status(401).send({ 
             status: 'Failed',
             message: 'Authentication failed due to invalid token!' 
           });
@@ -31,6 +32,26 @@ class Authenticator {
         message: 'Authentication required for this route'
       });
     }
+  }
+  /**
+   * method to authenticate Admin before proceeding
+   * @function authenticateAdmin
+   * @returns {void}
+   */
+  static authenticateAdmin(request, response, next){
+    db.Role.findOne({where: {id: request.decoded.RoleId}})
+        .then(role => {
+          if(role.title === 'admin'){
+            next();
+          } else {
+            response.status(403).send({
+              success: false,
+              message: 'You are not permitted to perform this operation'
+            })
+          }
+        })
+        .catch(error => response.status(404).send(error));
+
   }
 }
 export default Authenticator;

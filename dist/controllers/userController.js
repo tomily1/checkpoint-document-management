@@ -10,11 +10,16 @@ var _models = require('../models');
 
 var _models2 = _interopRequireDefault(_models);
 
+var _jsonwebtoken = require('jsonwebtoken');
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Users = _models2.default.users;
+var SECRET_KEY = process.env.SECRET || 'secret';
 
 var UserController = function () {
   function UserController() {
@@ -151,6 +156,43 @@ var UserController = function () {
         response.status(400).send({
           error: error
         });
+      });
+    }
+    /**
+     * 
+     */
+
+  }, {
+    key: 'loginUser',
+    value: function loginUser(request, response) {
+      Users.findOne({ where: { email: request.body.email } }).then(function (user) {
+        if (user && user.validPassword(request.body.password)) {
+          var token = _jsonwebtoken2.default.sign({
+            RoleId: user.RoleId,
+            UserId: user.id
+          }, SECRET_KEY, { expiresIn: 86400 });
+          response.status(201).send({ token: token, expiresIn: 86400 });
+        } else {
+          response.status(401).send({
+            success: false,
+            message: 'Failed to Authenticate User, Invalid Password or Email'
+          });
+        }
+      }).catch(function (error) {
+        return response.status(404).send({
+          message: 'Error!'
+        });
+      });
+    }
+    /**
+     * 
+     */
+
+  }, {
+    key: 'logoutUser',
+    value: function logoutUser(request, response) {
+      response.send({
+        message: 'User logged out successfully'
       });
     }
   }]);

@@ -82,6 +82,84 @@ var DocumentController = function () {
                 return response.status(401).send(error);
             });
         }
+        /**
+         * 
+         */
+
+    }, {
+        key: 'fetchUserDocument',
+        value: function fetchUserDocument(request, response) {
+            Documents.find({ where: { id: request.body.id } }).then(function (document) {
+                if (document) {
+                    response.status(200).send(document);
+                } else {
+                    response.status(404).send({
+                        success: false,
+                        message: 'No Document found for this User'
+                    });
+                }
+            }).catch(function (error) {
+                response.status(400).send({
+                    error: error
+                });
+            });
+        }
+
+        /**
+         * 
+         */
+
+    }, {
+        key: 'deleteDocument',
+        value: function deleteDocument(request, response) {
+            Documents.findOne({
+                where: {
+                    id: request.body.id
+                }
+            }).then(function (document) {
+                if (document) {
+                    document.destroy().then(function () {
+                        return response.status(201).send({
+                            success: true,
+                            message: 'Document has been successfully deleted'
+                        });
+                    }).catch(function (error) {
+                        return response.status(401).send(error);
+                    });
+                } else {
+                    response.status(404).send({
+                        success: false,
+                        message: 'Document not found'
+                    });
+                }
+            }).catch(function (error) {
+                return response.status(401).send(error);
+            });
+        }
+        /**
+         * 
+         */
+
+    }, {
+        key: 'updateDocument',
+        value: function updateDocument(request, response) {
+            Documents.findOne({ where: { id: request.body.id } }).then(function (document) {
+                if (document) {
+                    document.update(request.body).then(function (updatedDocument) {
+                        return response.status(201).send(updatedDocument);
+                    }).catch(function (error) {
+                        return response.status(401).send(error);
+                    });
+                } else {
+                    response.status(404).send({
+                        success: false,
+                        message: 'Document not found'
+                    });
+                }
+            }).catch(function (error) {
+                return response.status(401).send(error);
+            });
+        }
     }]);
 
     return DocumentController;

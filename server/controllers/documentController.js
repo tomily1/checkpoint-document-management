@@ -60,6 +60,73 @@ class DocumentController {
             })
             .catch(error => response.status(401).send(error));
     }
+    /**
+     * 
+     */
+    static fetchUserDocument(request, response) {
+        Documents.find({ where: { id: request.body.id } })
+            .then((document) => {
+                if (document) {
+                    response.status(200).send(document);
+                } else {
+                    response.status(404).send({
+                        success: false,
+                        message: 'No Document found for this User'
+                    });
+                }
+            })
+            .catch((error) => {
+                response.status(400).send({
+                    error
+                });
+            });
+    }
+
+    /**
+     * 
+     */
+    static deleteDocument(request, response) {
+        Documents.findOne({
+            where: {
+                id: request.body.id
+            }
+        })
+            .then(document => {
+                if (document) {
+                    document.destroy()
+                        .then(() => response.status(201).send({
+                            success: true,
+                            message: 'Document has been successfully deleted'
+                        }))
+                        .catch(error => response.status(401).send(error))
+                } else {
+                    response.status(404).send({
+                        success: false,
+                        message: 'Document not found'
+                    })
+                }
+            })
+            .catch(error => response.status(401).send(error));
+    }
+    /**
+     * 
+     */
+    static updateDocument(request, response) {
+        Documents.findOne({ where: { id: request.body.id } })
+            .then(document => {
+                if (document) {
+                    document.update(request.body)
+                        .then(updatedDocument => response.status(201).send(updatedDocument))
+                        .catch(error => response.status(401).send(error));
+                } else {
+                    response.status(404).send({
+                        success: false,
+                        message: 'Document not found'
+                    })
+                }
+            })
+            .catch(error => response.status(401).send(error));
+    }
 
 }
 export default DocumentController;

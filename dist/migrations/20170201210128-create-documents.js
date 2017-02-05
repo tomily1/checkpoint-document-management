@@ -16,16 +16,12 @@ module.exports = {
         type: Sequelize.TEXT
       },
       access: {
+        defaultValue: 'public',
         type: Sequelize.STRING
       },
       OwnerId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'users',
-          key: 'id',
-          as: 'OwnerId'
-        }
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
