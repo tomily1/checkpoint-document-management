@@ -39,7 +39,7 @@ module.exports = function (sequelize, DataTypes) {
       associate: function associate(models) {
         users.belongsTo(models.Role, {
           onDelete: 'CASCADE',
-          foreignKey: 'id'
+          foreignKey: 'RoleId'
         });
         users.hasMany(models.documents, {
           foreignKey: 'OwnerId',

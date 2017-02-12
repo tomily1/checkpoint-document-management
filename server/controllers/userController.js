@@ -37,7 +37,12 @@ class UserController {
           RoleId: request.body.RoleId
         })
         .then(user => response.status(201).send(user))
-        .catch(error => response.status(401).send(error));
+        .catch(error => response.status(500).send(error));
+    } else {
+      response.status(400).send({
+        success: false,
+        message: 'You did not input your field properly'
+      });
     }
   }
   /**

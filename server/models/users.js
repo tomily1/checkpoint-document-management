@@ -33,8 +33,8 @@ module.exports = (sequelize, DataTypes) => {
         associate: (models) => {
           users.belongsTo(models.Role, {
             onDelete: 'CASCADE',
-            foreignKey: 'id'
-          })
+            foreignKey: 'RoleId'
+          });
           users.hasMany(models.documents, {
             foreignKey: 'OwnerId',
             onDelete: 'CASCADE',

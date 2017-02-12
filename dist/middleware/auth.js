@@ -71,7 +71,7 @@ var Authenticator = function () {
         } else {
           response.status(403).send({
             success: false,
-            message: 'You are not permitted to perform this operation'
+            message: 'You are not permitted to perform this operation, Admin Only'
           });
         }
       }).catch(function (error) {

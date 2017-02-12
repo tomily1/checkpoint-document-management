@@ -59,6 +59,11 @@ var UserController = function () {
         }).catch(function (error) {
           return response.status(401).send(error);
         });
+      } else {
+        response.status(400).send({
+          success: false,
+          message: 'You did not input your field properly'
+        });
       }
     }
     /**

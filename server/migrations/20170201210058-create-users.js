@@ -31,7 +31,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       RoleId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Roles',
+          key: 'id',
+          as: 'RoleId',
+          onInsert: 'CASCADE'
+        }
       },
       createdAt: {
         allowNull: false,

@@ -4,9 +4,10 @@
   "description": "An Application Programming interface for document management",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/nodemon ./bin/www",
-    "dev": "./node_modules/gulp/bin/gulp.js develop_server",
-    "test": "\n specify test here"
+    "start": "./node_modules/gulp/bin/gulp.js serve",
+    "dev": "NODE_ENV=test ./node_modules/gulp/bin/gulp.js develop_server",
+    "mocha": "mocha --compilers js:babel-core/register server/test/User.spec.js",
+    "test": "NODE_ENV=test npm run mocha"
   },
   "repository": {
     "type": "git",
@@ -38,16 +39,22 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.9.0",
+    "faker": "^3.1.0",
+    "fm-log": "^4.4.3",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.1",
     "gulp-mocha": "^3.0.1",
     "gulp-nodemon": "^2.2.1",
-    "nodemon": "^1.11.0"
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
+    "superagent": "^3.4.1",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.0",
+    "dotenv": "^4.0.0",
     "express": "^4.14.1",
     "jsonwebtoken": "^7.2.1",
     "morgan": "^1.7.0",

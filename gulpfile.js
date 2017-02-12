@@ -14,21 +14,21 @@ gulp.task('test', ['transpile'], () => {
  */
 gulp.task('transpile', () => {
   return gulp.src(['server/**/*.js'])
-  .pipe(babel({presets: ['es2015']}))
+  .pipe(babel({ presets: ['es2015'] }))
   .pipe(gulp.dest('dist'));
 });
 /**
  * Gulp task to run the server
  */
 gulp.task('serve', () => {
-  nodemon({'script': './dist/server.js'})
+  nodemon({ script: './dist/server.js' });
 });
 /**
  * Gulp task to watch the server folder for file changes, then run
  * necessary commands afterwards
  */
 gulp.task('watch_server', () => {
-  gulp.watch('server/**/*.*', {cwd: './'}, ['test']);
+  gulp.watch('server/**/*.*', { cwd: './' }, ['test']);
 });
 /**
  * Gulp task for development purposes
@@ -36,4 +36,4 @@ gulp.task('watch_server', () => {
  * start the server,
  * listen to changes on the sever files
  */
-gulp.task('develop_server', ['test', 'serve', 'watch_server']);
+gulp.task('develop_server', ['serve', 'watch_server']);

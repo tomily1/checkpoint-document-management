@@ -3,12 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+require('dotenv');
 var fs = require('fs');
 var path = require('path');
 var Sequelize = require('sequelize');
 var basename = path.basename(module.filename);
-var env = process.env.NODE_ENV || 'development';
+var env = 'test'; //process.env.NODE_ENV || 'test';
 var config = require('../../config/config.json')[env];
+console.log(config);
 var db = {};
 
 if (config.use_env_variable) {
