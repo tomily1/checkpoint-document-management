@@ -21,3 +21,4 @@ addons:
   postgresql: "9.3"
 after_failure:
   - npm run coveralls
+osx_image: xcode8.1
