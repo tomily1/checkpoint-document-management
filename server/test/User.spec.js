@@ -37,17 +37,27 @@ describe('Users', () => {
             done();
           });
       });
-    it(`Should return a TOKEN 
-      if a Regular User is successfully logged in`,
+    it('Should return a TOKEN if a Regular User is successfully logged in',
       (done) => {
         client.post('/users/login')
           .send(testData.regularUser1)
           .end((error, response) => {
-            // console.log(response);
             expect(response.body).to.have.property('token');
             done();
           });
       });
+    it('Should be able to update user details', (done) => {
+      client.put('/users/1')
+        .send({
+          firstname: 'Tomilayo',
+          lastname: 'Israel',
+          password: 'Israel123'
+        })
+        .end((error, response) => {
+          expect(response.status).to.equal(201);
+          done();
+        });
+    });
   });
 
   describe('Admin User', () => {
@@ -57,7 +67,6 @@ describe('Users', () => {
         client.post('/users')
           .send(testData.adminUser)
           .end((error, response) => {
-            console.log(response);
             expect(response.status).to.equal(201);
             done();
           });
@@ -71,20 +80,21 @@ describe('Users', () => {
             done();
           });
       });
-    it('Should allow login for correct credentials',
-      (done) => {
-        client.post('/users/login')
-          .send(testData.regularUser1)
-          .end((error, response) => {
-            // console.log(response);
-            expect(response.body).to.have.property('token');
-            done();
-          });
-      });
   });
 
-  // describe('login', () => {
-  //   const adminUser = testData.adminUser;
+  describe('login', () => {
+    const adminUser = testData.adminUser;
 
-  // });
+    it('Should allow login for only CORRECT details of an Admin user', (done) => {
+      client.post('/users/login')
+        .send({
+          email: adminUser.email,
+          password: adminUser.password
+        })
+        .end((error, response) => {
+          expect(response.body).to.have.property('token');
+          done();
+        });
+    });
+  });
 });

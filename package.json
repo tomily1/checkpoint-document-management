@@ -7,7 +7,7 @@
     "start": "./node_modules/gulp/bin/gulp.js serve",
     "dev": "NODE_ENV=test ./node_modules/gulp/bin/gulp.js develop_server",
     "seed": "./node_modules/.bin/babel-node server/test/helpers/seed.helper.js",
-    "mocha": "mocha --compilers js:babel-core/register server/test/User.spec.js",
+    "mocha": "mocha --compilers js:babel-core/register server/test/User.spec.js --watch",
     "test": "NODE_ENV=test npm run seed && npm run mocha",
     "cover": "rm -rf coverage/ && NODE_ENV=test babel-node ./node_modules/babel-istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec server/test",
     "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls",
