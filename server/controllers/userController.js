@@ -1,5 +1,7 @@
-import db from '../models';
 import jwt from 'jsonwebtoken';
+import db from '../models';
+import Authenticate from '../middleware/auth';
+
 const Users = db.users;
 const SECRET_KEY = process.env.SECRET || 'secret';
 
@@ -36,7 +38,12 @@ class UserController {
             email: request.body.email,
             RoleId: request.body.RoleId
           })
-          .then(user => response.status(201).send(user))
+          .then(user => response.status(201).send({
+            success: true,
+            message: 'User successfully signed up',
+            RoleId: user.RoleId,
+            token: Authenticate.generateToken(user)
+          }))
           .catch(error => response.status(500).send(error));
       } else {
         response.status(400).send({
@@ -65,7 +72,7 @@ class UserController {
             })
           }
         })
-        .catch(error => response.status(401).send(error));
+        .catch(error => response.status(404).send(error));
     }
     /**
      * 
@@ -156,6 +163,7 @@ class UserController {
      */
   static logoutUser(request, response) {
     response.send({
+      success: true,
       message: 'User logged out successfully'
     })
   }

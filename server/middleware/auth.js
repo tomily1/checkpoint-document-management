@@ -17,11 +17,11 @@ class Authenticator {
     if (token) {
       jwt.verify(token, SECRET_KEY, (error, decoded) => {
         if (error) {
-          response.status(401).send({ 
+          response.status(401).send({
             status: 'Failed',
-            message: 'Authentication failed due to invalid token!' 
+            message: 'Authentication failed due to invalid token!'
           });
-        } else { 
+        } else {
           request.decoded = decoded;
           next();
         }
@@ -34,24 +34,32 @@ class Authenticator {
     }
   }
   /**
+   * 
+   */
+  static generateToken(user) {
+    return jwt.sign({
+      RoleId: user.RoleId,
+      UserId: user.id
+    }, SECRET_KEY, { expiresIn: 86400 });
+  }
+  /**
    * method to authenticate Admin before proceeding
    * @function authenticateAdmin
    * @returns {void}
    */
-  static authenticateAdmin(request, response, next){
-    db.Role.findOne({where: {id: request.decoded.RoleId}})
-        .then(role => {
-          if(role.title === 'admin'){
-            next();
-          } else {
-            response.status(403).send({
-              success: false,
-              message: 'You are not permitted to perform this operation, Admin Only'
-            })
-          }
-        })
-        .catch(error => response.status(404).send(error));
-
+  static authenticateAdmin(request, response, next) {
+    db.Role.findOne({ where: { id: request.decoded.RoleId } })
+      .then((role) => {
+        if (role.title === 'admin') {
+          next();
+        } else {
+          response.status(403).send({
+            success: false,
+            message: 'You are not permitted to perform this operation, Admin Only'
+          });
+        }
+      })
+      .catch(error => response.status(404).send(error));
   }
 }
 export default Authenticator;

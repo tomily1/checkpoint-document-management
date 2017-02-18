@@ -165,8 +165,8 @@ const testData = {
   },
   documentPublic1: {
     title: faker.company.catchPhrase(),
-    access: 'public',
-    content: faker.lorem.paragraph()
+    content: faker.lorem.paragraph(),
+    access: 'public'
   },
   documentRole2: {
     title: faker.company.catchPhrase(),
