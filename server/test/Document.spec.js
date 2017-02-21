@@ -35,9 +35,18 @@ describe('Documents:', () => {
       });
   });
 
-  describe('Post: ', () => {
+  describe('POST: ==>\n', () => {
     it('Should return response status 201 even if the database is Empty ', (done) => {
       client.get('/documents')
+        .set({ 'x-access-token': adminUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(302);
+          done();
+        });
+    });
+    it('Admin should be able to create a new document', (done) => {
+      client.post('/documents')
+        .send(testData.documentPublic2)
         .set({ 'x-access-token': adminUserToken })
         .end((error, response) => {
           expect(response.status).to.equal(201);
@@ -71,18 +80,109 @@ describe('Documents:', () => {
           done();
         });
     });
-    it('User should be able to search for their own documents', (done) => {
-      client.delete('/documents/id')
+    it('Should return error with status code 401 when the inputted document fields are not valid', (done) => {
+      client.post('/documents')
+        .send(testData.documentNotValid)
         .set({ 'x-access-token': regularUserToken })
-        .end()
+        .end((error, response) => {
+          expect(response.status).to.equal(401);
+          done();
+        });
     });
   });
-  describe('Admin can get all documents', () => {
-    it('Should only be accessed by the admin only', (done) => {
+  describe('GET: ==>\n', () => {
+    it('should be able to get documents by id', (done) => {
+      client.get('/documents/2')
+        .set({ 'x-access-token': regularUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(200);
+          client.post('/documents')
+            .send(testData.documentPrivate2)
+            .set({ 'x-access-token': regularUserToken })
+            .end(() => {
+              done();
+            });
+        });
+    });
+    it('Other User cannot access document that has access level of private', (done)=> {
+      client.get('/documents/4')
+        .set({ 'x-access-token': regularUser2Token })
+        .end((error, response) => {
+          expect(response.status).to.equal(403);
+          done();
+        });
+    });
+  });
+  describe('Update: ==>\n', () => {
+    it('User should be able to update their document information', (done) => {
+      client.put('/documents/4')
+        .set({ 'x-access-token': regularUserToken })
+        .send(testData.documentPrivate3)
+        .end((error, response) => {
+          expect(response.status).to.equal(201);
+          done();
+        });
+    });
+    it('User without access should not be able to update other users documents', (done) => {
+      client.put('/documents/4')
+        .set({ 'x-access-token': regularUser2Token })
+        .send(testData.documentPrivate3)
+        .end((error, response) => {
+          expect(response.status).to.equal(403);
+          done();
+        });
+    });
+    it('Should not authorize update and return status code 401 for invalid request parameter', (done) => {
+      client.put('/documents/w')
+        .set({ 'x-access-token': regularUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(401);
+          done();
+        });
+    });
+    it('Should not authorize update and return status code 401 for invalid update parameters', (done) => {
+      client.put('/documents/4')
+        .send(testData.documentNotValid)
+        .set({ 'x-access-token': regularUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(401);
+          done();
+        });
+    });
+  });
+  describe('DELETE: ==>\n', () => {
+    it('Users should be able to delete their own documents', (done) => {
+      client.delete('/documents/2')
+        .set({ 'x-access-token': regularUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(201);
+          done();
+        });
+    });
+    it('Users cannot delete documents they do not own', (done) => {
+      client.delete('/documents/1')
+        .set({ 'x-access-token': regularUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(403);
+          done();
+        });
+    });
+    it('Should not authorize delete and return status code 401 for invalid request parameter ', (done) => {
+      client.delete('/documents/w')
+        .set({ 'x-access-token': regularUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(401);
+          done();
+        });
+    });
+  });
+
+  describe('GET documents by id :==>\n', () => {
+    it('All documents Should only be accessed by the admin only', (done) => {
       client.get('/documents')
         .set({ 'x-access-token': adminUserToken })
         .end((error, response) => {
-          expect(response.status).to.equal(201);
+          expect(response.status).to.equal(302);
           done();
         });
     });

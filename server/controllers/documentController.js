@@ -34,7 +34,6 @@ class DocumentController {
           title: request.body.title,
           content: request.body.content,
           access: request.body.access ? request.body.access : 'public',
-          OwnerRoleId: request.decoded.RoleId,
           OwnerId: request.decoded.UserId,
         })
         .then((document) => {
@@ -65,7 +64,7 @@ class DocumentController {
    * @param{Object} response - Server response
    * @return {Void} - returns Void
    */
-  static fetchDocument(request, response) {
+  static fetchDocuments(request, response) {
     Documents.findOne({
       where: {
         id: request.params.id
@@ -120,7 +119,7 @@ class DocumentController {
    * @param{Object} response - Server response
    * @return {Void} - returns Void
    */
-  static fetchDocuments(request, response) {
+  static fetchDocument(request, response) {
     const searchQuery = request.query.search;
     const searchLimit = request.query.limit;
     const Role = request.decoded.RoleId;
@@ -128,7 +127,7 @@ class DocumentController {
       attributes: ['id', 'OwnerId', 'access', 'title', 'content', 'createdAt'],
       include: [{
         model: db.users,
-        attributes: ['roleId']
+        attributes: ['RoleId']
       }],
       order: '"createdAt" DESC'
     };
@@ -161,7 +160,7 @@ class DocumentController {
               searchResult.push(document.dataValues);
             }
           });
-          response.status(200).send({
+          response.status(302).send({
             success: true,
             message: `Documents matching ${searchQuery}`,
             documents: searchResult

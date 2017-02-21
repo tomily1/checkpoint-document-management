@@ -209,6 +209,11 @@ const testData = {
     content: faker.lorem.paragraph()
   },
   documentInvalid: {},
+  documentNotValid: {
+    title: faker.company.catchPhrase(),
+    access: 1,
+    content: faker.lorem.paragraph()
+  },
   documentNoAccess: {
     title: faker.company.catchPhrase(),
     content: faker.lorem.paragraph()
