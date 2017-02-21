@@ -16,7 +16,7 @@ before_script:
 script:
   - npm test
 after_success:
-  - npm run coveralls
+  - NODE_ENV=test npm run coveralls
 addons:
   postgresql: "9.3"
 after_failure:
