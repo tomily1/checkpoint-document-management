@@ -35,8 +35,16 @@ describe('Documents:', () => {
       });
   });
 
-  describe('Post', () => {
-    it('should create a new document',
+  describe('Post: ', () => {
+    it('Should return response status 201 even if the database is Empty ', (done) => {
+      client.get('/documents')
+        .set({ 'x-access-token': adminUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(201);
+          done();
+        });
+    });
+    it('User should create a new document',
       (done) => {
         const document = testData.documentPublic1;
         const document2 = testData.documentRole3;
@@ -54,8 +62,22 @@ describe('Documents:', () => {
               });
           });
       });
+    it('User should not be able to create documents if document fields are not inputted properly', (done) => {
+      client.post('/documents')
+        .send(testData.documentInvalid)
+        .set({ 'x-access-token': regularUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(404);
+          done();
+        });
+    });
+    it('User should be able to search for their own documents', (done) => {
+      client.delete('/documents/id')
+        .set({ 'x-access-token': regularUserToken })
+        .end()
+    });
   });
-  describe('Get all documents', () => {
+  describe('Admin can get all documents', () => {
     it('Should only be accessed by the admin only', (done) => {
       client.get('/documents')
         .set({ 'x-access-token': adminUserToken })

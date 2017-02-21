@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const documents = sequelize.define('documents', {
     title: {
       allowNull: false,
-      type:DataTypes.STRING
+      type: DataTypes.STRING
     },
     content: {
       allowNull: false,
@@ -23,10 +23,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate: (models) => {
-        documents.belongsTo(models.users,{
+        documents.belongsTo(models.users, {
           onDelete: 'CASCADE',
           foreignKey: 'OwnerId'
-        })
+        });
       }
     }
   });

@@ -28,7 +28,7 @@ gulp.task('serve', () => {
  * necessary commands afterwards
  */
 gulp.task('watch_server', () => {
-  gulp.watch('server/**/*.*', { cwd: './' }, ['test']);
+  gulp.watch('server/**/*.*', { cwd: './' });//, ['test']);
 });
 /**
  * Gulp task for development purposes
@@ -36,4 +36,4 @@ gulp.task('watch_server', () => {
  * start the server,
  * listen to changes on the sever files
  */
-gulp.task('develop_server', ['serve', 'watch_server']);
+gulp.task('develop_server', ['transpile', 'serve', 'watch_server']);
