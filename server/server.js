@@ -1,4 +1,4 @@
-import DocumentController from './controllers/documentController';
+/* eslint-disable no-console */
 import IndexRoute from './routes/index';
 
 const express = require('express');
@@ -13,7 +13,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//-----Routes-------------//
+// -----Routes-------------//
 IndexRoute.Roles(app);
 IndexRoute.Users(app);
 IndexRoute.Documents(app);

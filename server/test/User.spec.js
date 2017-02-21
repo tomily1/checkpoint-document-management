@@ -1,8 +1,8 @@
+ /* eslint-disable import/no-extraneous-dependencies */
 import supertest from 'supertest';
 import chai from 'chai';
 import app from '../server';
 import testData from './helpers/spec.helper';
-import db from '../models';
 
 const expect = chai.expect;
 const client = supertest.agent(app);

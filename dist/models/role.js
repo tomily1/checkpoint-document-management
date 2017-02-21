@@ -2,7 +2,11 @@
 
 module.exports = function (sequelize, DataTypes) {
   var Role = sequelize.define('Role', {
-    title: DataTypes.STRING
+    title: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false
+    }
   }, {
     classMethods: {
       associate: function associate(models) {

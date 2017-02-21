@@ -51,11 +51,11 @@ module.exports = function (sequelize, DataTypes) {
     },
     instanceMethods: {
       /**
-       * Compare plain password to user's hashed password
-       * @method
-       * @param {String} password
-       * @returns {Boolean} password match
-       */
+        * Compare plain password to user's hashed password
+        * @method
+        * @param {String} password
+        * @returns {Boolean} password match
+        */
       validPassword: function validPassword(password) {
         return _bcryptNodejs2.default.compareSync(password, this.password);
       },
@@ -81,4 +81,4 @@ module.exports = function (sequelize, DataTypes) {
     }
   });
   return users;
-};
+}; /* eslint-disable no-underscore-dangle */

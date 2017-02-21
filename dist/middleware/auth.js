@@ -34,6 +34,11 @@ var Authenticator = function () {
     /**
      * Method to authenticate a user before proceeding
      * to protected routes
+     * @param {Object} request - The request Object
+     * @param {Object} response - The response Object
+     * @param {Function} next - Function call to move to the next middleware
+     * or endpoint controller
+     * @return {Void} - Returns void
      */
     value: function authenticateUser(request, response, next) {
       var token = request.headers.authorization || request.headers['x-access-token'] || request.body.token;
@@ -57,9 +62,26 @@ var Authenticator = function () {
       }
     }
     /**
-     * method to authenticate Admin before proceeding
-     * @function authenticateAdmin
-     * @returns {void}
+     * Method to generate a token for a user
+     * @param{Object} user - User Object
+     * @return{String} - Token string
+     */
+
+  }, {
+    key: 'generateToken',
+    value: function generateToken(user) {
+      return _jsonwebtoken2.default.sign({
+        RoleId: user.RoleId,
+        UserId: user.id
+      }, SECRET_KEY, { expiresIn: 86400 });
+    }
+    /**
+     * Method to verify that user is an Admin
+     * to access Admin endpoints
+     * @param{Object} request - Request Object
+     * @param{Object} response - Response Object
+     * @param{Object} next - Function to pass flow to the next controller
+     * @return{Void} - returns Void
      */
 
   }, {

@@ -2,13 +2,6 @@ node_modules
 coverage
 npm-debug.log
 .env
-dist
-dist/
-dist/controllers/*.js
-dist/middleware/*.js
-dist/migrations/*.js
-dist/models/*.js
-./dist/server.js
-.
+dist/*
 .vscode
 .DS_Store

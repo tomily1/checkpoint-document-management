@@ -1,7 +1,9 @@
+ /* eslint-disable import/no-extraneous-dependencies */
 import supertest from 'supertest';
 import chai from 'chai';
 import app from '../server';
 import testData from './helpers/spec.helper';
+
 const expect = chai.expect;
 const client = supertest.agent(app);
 
@@ -30,7 +32,7 @@ describe('Admin Roles:', () => {
         done();
       });
   });
-  it('should return 404 status code if the roles title is inputted',(done) => {
+  it('should return 404 status code if the roles title is inputted', (done) => {
     client.post('/roles')
       .set({ 'x-access-token': adminToken })
       .send({})

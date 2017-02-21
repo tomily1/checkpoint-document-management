@@ -15,6 +15,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Roles = _models2.default.Role;
+/**
+ * Class to implement Role controlllers
+ */
 
 var RoleController = function () {
   function RoleController() {
@@ -23,9 +26,22 @@ var RoleController = function () {
 
   _createClass(RoleController, null, [{
     key: 'postRole',
-    value: function postRole(request, response) {
+
+    /**
+     * Method to verify the creation of a new Role
+     * @param{Object} request - Request Object
+     * @return{Void} - Returns void
+     */
+    value: function postRole(request) {
       return request.body && request.body.title;
     }
+    /**
+     * Method to create a a new Role
+     * @param{Object} request - Request Object
+     * @param{Object} response - Response Object
+     * @return{Void} - Returns void
+     */
+
   }, {
     key: 'createRole',
     value: function createRole(request, response) {
@@ -37,13 +53,19 @@ var RoleController = function () {
         }).catch(function (error) {
           return response.status(401).send(error);
         });
-      } else {
-        response.status(404).send({
-          success: false,
-          message: 'Error! request.body.title not found'
-        });
       }
+      response.status(404).send({
+        success: false,
+        message: 'Error! request.body.title not found'
+      });
     }
+    /**
+     * Method to createa fetch a Role
+     * @param{Object} request - Request Object
+     * @param{Object} response - Response Object
+     * @return{Void} - Returns void
+     */
+
   }, {
     key: 'fetchRoles',
     value: function fetchRoles(request, response) {
@@ -53,6 +75,13 @@ var RoleController = function () {
         return response.status(401).send(error);
       });
     }
+    /**
+     * Method to delete a Role
+     * @param{Object} request - Request Object
+     * @param{Object} response - Response Object
+     * @return{Void} - Returns void
+     */
+
   }, {
     key: 'deleteRole',
     value: function deleteRole(request, response) {

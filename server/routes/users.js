@@ -6,7 +6,8 @@ import Authenticator from '../middleware/auth';
 const router = express.Router();
 
 router.route('/')
-    .get(Authenticator.authenticateUser, Authenticator.authenticateAdmin, UserController.fetchAllUsers)
+    .get(Authenticator.authenticateUser,
+        Authenticator.authenticateAdmin, UserController.fetchAllUsers)
     .post(UserController.createUser);
 
 router.route('/:id')

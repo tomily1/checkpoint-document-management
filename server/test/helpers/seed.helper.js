@@ -1,41 +1,45 @@
-import faker from 'faker';
+/* eslint-disable import/no-extraneous-dependencies */
 import logger from 'fm-log';
 import bcrypt from 'bcrypt-nodejs';
 import db from '../../models';
 
 /**
- * @class {Seeder populates the database with fake data}
+ * SeedData class to populate database with default data
  */
 class Seeder {
   /**
-   *@function Initialize the seeder
-   * @returns void
+   * Perform the sequential population of the database
+   * in order of associations
+   * @return {Void} - Returns Void
    */
   static initialize() {
-      db.sequelize.sync({ force: true })
-        .then(() => {
-          Seeder.seedRoleTable();
-        })
-        .catch((err) => {
-          logger.error(err);
-        });
-    }
-    /**
-     * 
-     */
+    db.sequelize.sync({ force: true })
+      .then(() => {
+        Seeder.seedRoleTable();
+      })
+      .catch((err) => {
+        logger.error(err);
+      });
+  }
+  /**
+   * Populates database with default roles
+   * @returns {object} - A Promise object
+   */
   static seedRoleTable() {
-      const roles = [{
-          title: 'admin'
-        },
-        {
-          title: 'regular'
-        }
-      ];
-      return db.Role.bulkCreate(roles);
+    const roles = [{
+      title: 'admin'
+    },
+    {
+      title: 'regular'
     }
-    /**
-     * 
-     */
+    ];
+    return db.Role.bulkCreate(roles);
+  }
+  /**
+  * Generate a hash from plain password string
+  * @param {String} password
+  * @return {String} hashed password
+  */
   static hashPassword(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(5));
   }
