@@ -165,23 +165,21 @@ var DocumentController = function () {
       }
       Documents.findAll(queryBuilder).then(function (results) {
         if (results) {
-          (function () {
-            var searchResult = [];
-            results.forEach(function (document) {
-              if (Role === 1) {
-                searchResult.push(document.dataValues);
-              } else if ((document.access === 'public' || document.user.dataValues.RoleId === request.decoded.RoleId) && document.access !== 'private') {
-                searchResult.push(document.dataValues);
-              } else if (document.access === 'private' && document.OwnerId === request.decoded.UserId) {
-                searchResult.push(document.dataValues);
-              }
-            });
-            response.status(302).send({
-              success: true,
-              message: 'Documents matching ' + searchQuery,
-              documents: searchResult
-            });
-          })();
+          var searchResult = [];
+          results.forEach(function (document) {
+            if (Role === 1) {
+              searchResult.push(document.dataValues);
+            } else if ((document.access === 'public' || document.user.dataValues.RoleId === request.decoded.RoleId) && document.access !== 'private') {
+              searchResult.push(document.dataValues);
+            } else if (document.access === 'private' && document.OwnerId === request.decoded.UserId) {
+              searchResult.push(document.dataValues);
+            }
+          });
+          response.status(302).send({
+            success: true,
+            message: 'Documents matching ' + searchQuery,
+            documents: searchResult
+          });
         } else {
           response.status(401).send({
             success: false,
@@ -217,24 +215,22 @@ var DocumentController = function () {
       };
       Users.findById(request.params.id, queryBuilder).then(function (results) {
         if (results) {
-          (function () {
-            var result = results.dataValues.documents;
-            var searchResult = [];
-            result.forEach(function (document) {
-              if (userRole === 1) {
-                searchResult.push(document.dataValues);
-              } else if ((document.access === 'public' || document.user.dataValues.RoleId === userRole) && document.access !== 'private') {
-                searchResult.push(document.dataValues);
-              } else if (document.access === 'private' && document.OwnerId === Owner) {
-                searchResult.push(document.dataValues);
-              }
-            });
-            response.status(200).send({
-              success: true,
-              message: 'documents belonging to user id: ' + request.params.id + ' found',
-              documents: searchResult
-            });
-          })();
+          var result = results.dataValues.documents;
+          var searchResult = [];
+          result.forEach(function (document) {
+            if (userRole === 1) {
+              searchResult.push(document.dataValues);
+            } else if ((document.access === 'public' || document.user.dataValues.RoleId === userRole) && document.access !== 'private') {
+              searchResult.push(document.dataValues);
+            } else if (document.access === 'private' && document.OwnerId === Owner) {
+              searchResult.push(document.dataValues);
+            }
+          });
+          response.status(200).send({
+            success: true,
+            message: 'documents belonging to user id: ' + request.params.id + ' found',
+            documents: searchResult
+          });
         } else {
           response.status(404).send({
             success: false,

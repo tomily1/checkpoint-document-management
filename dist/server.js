@@ -4,17 +4,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _documentController = require('./controllers/documentController');
-
-var _documentController2 = _interopRequireDefault(_documentController);
-
 var _index = require('./routes/index');
 
 var _index2 = _interopRequireDefault(_index);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var express = require('express');
+var express = require('express'); /* eslint-disable no-console */
+
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 
@@ -26,7 +23,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//-----Routes-------------//
+// -----Routes-------------//
 _index2.default.Roles(app);
 _index2.default.Users(app);
 _index2.default.Documents(app);
