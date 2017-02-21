@@ -53,7 +53,6 @@
     "faker": "^3.1.0",
     "fm-log": "^4.4.3",
     "gulp": "^3.9.1",
-    // "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.1",
     "gulp-mocha": "^3.0.1",
     "gulp-nodemon": "^2.2.1",
