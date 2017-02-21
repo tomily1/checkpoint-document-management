@@ -4,7 +4,7 @@
   "description": "An Application Programming interface for document management",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production npm run create && npm run migration && ./node_modules/.bin/babel-node ./server/server.js",
+    "start": "./node_modules/.bin/babel ./server/server.js",
     "dev": "NODE_ENV=test ./node_modules/gulp/bin/gulp.js develop_server",
     "seed": "./node_modules/.bin/babel-node server/test/helpers/seed.helper.js",
     "mocha": "mocha --compilers js:babel-core/register server/test/*.spec.js",
@@ -53,7 +53,7 @@
     "faker": "^3.1.0",
     "fm-log": "^4.4.3",
     "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
+    // "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.1",
     "gulp-mocha": "^3.0.1",
     "gulp-nodemon": "^2.2.1",
