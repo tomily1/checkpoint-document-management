@@ -35,11 +35,11 @@ describe('Documents:', () => {
   });
 
   describe('POST: ==>\n', () => {
-    it('Should return response status 201 even if the database is Empty ', (done) => {
+    it('Should return response status 404 if the database is Empty ', (done) => {
       client.get('/documents')
         .set({ 'x-access-token': adminUserToken })
         .end((error, response) => {
-          expect(response.status).to.equal(302);
+          expect(response.status).to.equal(404);
           done();
         });
     });
@@ -208,7 +208,7 @@ describe('Documents:', () => {
       client.get('/documents')
         .set({ 'x-access-token': adminUserToken })
         .end((error, response) => {
-          expect(response.status).to.equal(302);
+          expect(response.status).to.equal(201);
           done();
         });
     });
