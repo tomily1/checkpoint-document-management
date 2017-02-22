@@ -1,4 +1,5 @@
- /* eslint-disable import/no-extraneous-dependencies */
+/* eslint import/no-extraneous-dependencies: 0 */
+/* eslint import/no-unresolved: 0 */
 import supertest from 'supertest';
 import chai from 'chai';
 import app from '../server';
