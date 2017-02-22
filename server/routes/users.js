@@ -13,7 +13,8 @@ router.route('/')
 
 router.route('/:id')
     .get(UserController.fetchUser)
-    .delete(Authenticator.authenticateUser, Authenticator.authenticateAdmin, UserController.deleteUser)
+    .delete(Authenticator.authenticateUser,
+            Authenticator.authenticateAdmin, UserController.deleteUser)
     .put(Authenticator.authenticateUser, UserController.updateUser);
 router.route('/:id/documents')
     .get(Authenticator.authenticateUser, DocumentController.fetchUserDocument);

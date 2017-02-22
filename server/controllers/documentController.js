@@ -1,7 +1,6 @@
 import db from '../models';
 
 const Documents = db.documents;
-const Users = db.users;
 
 /**
  * Controller for document management
