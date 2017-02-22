@@ -103,12 +103,39 @@ describe('Documents:', () => {
             });
         });
     });
+    it('Should return status code of 404 for document not found', (done) => {
+      client.get('/documents/200')
+        .set({ 'x-access-token': regularUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(404);
+          client.get('/documents/4')
+            .set({ 'x-access-token': regularUserToken })
+            .end((error1, response1) => {
+              expect(response1.status).to.equal(200);
+              done();
+            });
+        });
+    });
+
     it('Other User cannot access document that has access level of private', (done) => {
       client.get('/documents/4')
         .set({ 'x-access-token': regularUser2Token })
         .end((error, response) => {
           expect(response.status).to.equal(403);
           done();
+        });
+    });
+    it('Should give admin unrestricted access to get documents', (done) => {
+      client.get('/documents/4')
+        .set({ 'x-access-token': adminUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(200);
+          client.get('/documents/2')
+            .set({ 'x-access-token': adminUserToken })
+            .end((error1, response1) => {
+              expect(response1.status).to.equal(200);
+              done();
+            });
         });
     });
   });
@@ -182,6 +209,28 @@ describe('Documents:', () => {
         .set({ 'x-access-token': adminUserToken })
         .end((error, response) => {
           expect(response.status).to.equal(302);
+          done();
+        });
+    });
+    it('Admin should be able to get all the documents belonging to a particular user', (done) => {
+      client.post('/documents')
+        .set({ 'x-access-token': regularUserToken })
+        .send(testData.documentPublic1)
+        .end(() => {
+          client.get('/users/2/documents')
+            .set({ 'x-access-token': adminUserToken })
+            .end((error1, response1) => {
+              expect(response1.status).to.equal(200);
+              done();
+            });
+        });
+    });
+    it('Regular Users should be able to access public documents only', (done) => {
+      client.get('/users/2/documents')
+        .set({ 'x-access-token': regularUser2Token })
+        .end((error, response) => {
+          expect(response.status).to.equal(200);
+          expect(response.body[0].access).to.equal('public');
           done();
         });
     });

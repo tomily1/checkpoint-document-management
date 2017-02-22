@@ -13,7 +13,7 @@ class UserController {
   /**
    * Method to set the various document routes
    * @param{Object} request - Server request
-   * @return{Void} return Void
+   * @return{Object} return request parameters
    */
   static postRequest(request) {
     return (
@@ -71,16 +71,14 @@ class UserController {
             .then(() => response.status(200).send({
               success: true,
               message: 'User Successfully deleted from database'
-            }))
-            .catch(error => response.status(401).send(error));
+            }));
         } else {
           response.status(404).send({
             success: false,
             message: 'User not found'
           });
         }
-      })
-      .catch(error => response.status(404).send(error));
+      });
   }
   /**
    * Method used to Update user info
@@ -89,22 +87,29 @@ class UserController {
    * @returns{Void} return Void
    */
   static updateUser(request, response) {
+    const UserId = request.decoded.UserId;
+    const RoleId = request.decoded.RoleId;
     Users.findOne({
       where: { id: request.params.id }
     })
       .then((user) => {
         if (user) {
-          user.update(request.body)
-            .then(updatedUser => response.status(201).send(updatedUser))
-            .catch(error => response.status(401).send(error));
+          if (UserId === user.dataValues.id || RoleId === 1) {
+            user.update(request.body)
+              .then(updatedUser => response.status(201).send(updatedUser));
+          } else {
+            response.status(403).send({
+              success: false,
+              message: 'Unauthorized'
+            });
+          }
         } else {
           response.status(404).send({
             success: false,
             message: 'User not found'
           });
         }
-      })
-      .catch(error => response.status(401).send(error));
+      });
   }
   /**
    * Method used to fetch all users
@@ -115,16 +120,8 @@ class UserController {
   static fetchAllUsers(request, response) {
     Users.findAll({})
       .then((users) => {
-        if (users) {
-          response.status(201).send(users);
-        } else {
-          response.status(404).send({
-            success: false,
-            message: 'No user on this database'
-          });
-        }
-      })
-      .catch(error => response.status(401).send(error));
+        response.status(201).send(users);
+      });
   }
   /**
    * Method used to fetch user by their ID
@@ -143,11 +140,6 @@ class UserController {
             message: 'User not found'
           });
         }
-      })
-      .catch((error) => {
-        response.status(400).send({
-          error
-        });
       });
   }
   /**
@@ -168,13 +160,10 @@ class UserController {
         } else {
           response.status(401).send({
             success: false,
-            message: 'Failed to Authenticate User, Invalid Password or Email'
+            message: 'Failed to Authenticate User, Invalid Credentials'
           });
         }
-      })
-      .catch(error => response.status(404).send({
-        message: `Error!, \n${error.message}`
-      }));
+      });
   }
   /**
    * Method used to logout user

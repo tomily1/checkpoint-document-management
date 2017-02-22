@@ -10,7 +10,7 @@ class DocumentController {
   /**
    * Method to set the various document routes
    * @param{Object} request - Server request
-   * @return{Void} return Void
+   * @return{Object} return request parameters
    */
   static postRequest(request) {
     return (
@@ -187,49 +187,47 @@ class DocumentController {
    * @return{Void} - return Void
    */
   static fetchUserDocument(request, response) {
-    const userRole = request.decoded.RoleId;
-    const Owner = request.decoded.UserId;
-    const queryBuilder = {
-      attributes: ['id', 'email', 'firstName', 'lastName'],
-      include: [{
-        model: Documents,
-        attributes: ['id', 'title', 'content', 'createdAt'],
-      }]
-    };
-    Users.findById(request.params.id, queryBuilder)
-      .then((results) => {
-        if (results) {
-          const result = results.dataValues.documents;
-          const searchResult = [];
-          result.forEach((document) => {
-            if (userRole === 1) {
-              searchResult.push(document.dataValues);
-            } else if ((document.access === 'public' ||
-              document.user.dataValues.RoleId === userRole)
-              && document.access !== 'private') {
-              searchResult.push(document.dataValues);
-            } else if (document.access === 'private' && document.OwnerId === Owner) {
-              searchResult.push(document.dataValues);
+    const queryId = request.params.id;
+    const ownerId = request.decoded.UserId;
+    const roleId = request.decoded.RoleId;
+    db.Role.findById(roleId).then((role) => {
+      if (role) {
+        if (ownerId === queryId || role.title === 'admin') {
+          Documents.findAll({
+            where: {
+              OwnerId: queryId
             }
-          });
-          response.status(200).send({
-            success: true,
-            message: `documents belonging to user id: ${request.params.id} found`,
-            documents: searchResult
+          }).then((document) => {
+            if (document < 1) {
+              return response.status(404).send({
+                success: false,
+                message: 'No documents found'
+              });
+            }
+            const results = document;
+            return response.status(200).send(results);
           });
         } else {
-          response.status(404).send({
-            success: false,
-            message: `No document found for this user as User with id ${request.params.id} does not exist`
+          Documents.findAll({
+            where: {
+              OwnerId: queryId,
+              $and: {
+                access: 'public'
+              }
+            }
+          }).then((document) => {
+            if (document < 1) {
+              return response.status(404).send({
+                success: false,
+                message: 'No documents found'
+              });
+            }
+            const results = document;
+            return response.status(200).send(results);
           });
         }
-      })
-      .catch((error) => {
-        response.status(401).send({
-          success: false,
-          message: error.message
-        });
-      });
+      }
+    });
   }
   /**
    * Edit and Update User documents in the database
@@ -282,8 +280,7 @@ class DocumentController {
             .then(() => response.status(201).send({
               success: true,
               message: `Document ${request.params.id} has been successfully deleted`
-            }))
-            .catch(error => response.status(401).send(error));
+            }));
         } else {
           response.status(403).send({
             success: false,

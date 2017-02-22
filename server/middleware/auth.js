@@ -65,11 +65,10 @@ class Authenticator {
         } else {
           response.status(403).send({
             success: false,
-            message: 'You are not permitted to perform this operation, Admin Only'
+            message: 'You are not permitted to perform this operation'
           });
         }
-      })
-      .catch(error => response.status(404).send(error));
+      });
   }
 }
 export default Authenticator;

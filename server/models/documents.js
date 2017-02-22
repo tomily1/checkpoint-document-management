@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         isIn: [['private', 'public', 'role']],
-        // msg: 'must be private, public or role'
       }
     },
     OwnerId: {

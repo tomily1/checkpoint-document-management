@@ -8,7 +8,7 @@ class RoleController {
   /**
    * Method to verify the creation of a new Role
    * @param{Object} request - Request Object
-   * @return{Void} - Returns void
+   * @return{Object} - Return request parameters
    */
   static postRole(request) {
     return (
@@ -28,8 +28,7 @@ class RoleController {
         .create({
           title: request.body.title
         })
-        .then(role => response.status(201).send(role))
-        .catch(error => response.status(401).send(error));
+        .then(role => response.status(201).send(role));
     }
     response.status(404).send({
       success: false,
@@ -44,8 +43,7 @@ class RoleController {
    */
   static fetchRoles(request, response) {
     Roles.findAll({})
-      .then(role => response.status(201).send(role))
-      .catch(error => response.status(401).send(error));
+      .then(role => response.status(201).send(role));
   }
   /**
    * Method to delete a Role
@@ -61,8 +59,7 @@ class RoleController {
             .then(() => response.status(200).send({
               success: true,
               message: 'Role Successfully deleted from database'
-            }))
-            .catch(error => response.status(401).send(error));
+            }));
         } else {
           response.status(404).send({
             success: false,

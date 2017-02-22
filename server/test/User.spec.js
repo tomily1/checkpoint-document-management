@@ -1,5 +1,4 @@
  /* eslint-disable import/no-extraneous-dependencies */
- /* eslint-disable import/no-unresolved*/
 import supertest from 'supertest';
 import chai from 'chai';
 import app from '../server';
@@ -9,9 +8,9 @@ const expect = chai.expect;
 const client = supertest.agent(app);
 
 const regularUser = testData.regularUser1;
-describe('Users', () => {
-  describe('Create Regular Users', () => {
-    let regularUserToken;
+describe('Users ==> \n', () => {
+  describe('Users', () => {
+    let regularUserToken, adminToken2;
     it('should return a status code of 201 when a regular user has beesn successfully created',
       (done) => {
         client.post('/users')
@@ -72,34 +71,56 @@ describe('Users', () => {
           done();
         });
     });
-    it('Should be able to update user details', (done) => {
+    it('Should not be able to update other user details', (done) => {
+      client.post('/users')
+        .send(testData.adminUser4)
+        .end((error, response) => {
+          adminToken2 = response.body.token;
+          client.put('/users/1')
+            .send({
+              firstname: 'Tomilayo',
+              lastname: 'Israel',
+              password: 'Israel123'
+            })
+            .set({ 'x-access-token': regularUserToken })
+            .end((error1, response1) => {
+              expect(response1.status).to.equal(403);
+              done();
+            });
+        });
+    });
+    it('should not update details for non existent user', (done) => {
+      client.put('/users/100')
+        .send({})
+        .set({ 'x-access-token': adminToken2 })
+        .end((error, response) => {
+          expect(response.status).to.equal(404);
+          done();
+        });
+    });
+    it('Admin User should be able to update details of users', (done) => {
       client.put('/users/1')
         .send({
           firstname: 'Tomilayo',
           lastname: 'Israel',
           password: 'Israel123'
         })
+        .set({ 'x-access-token': adminToken2 })
         .end((error, response) => {
           expect(response.status).to.equal(201);
-          done();
-        });
-    });
-    it('should not update details for non existent user', (done) => {
-      client.put('/users/100')
-        .send({})
-        .end((error, response) => {
-          expect(response.status).to.equal(404);
           done();
         });
     });
   });
 
   describe('Admin User', () => {
+    let adminToken;
     it('Should return http code 201 if an Admin User is successfully created',
       (done) => {
         client.post('/users')
           .send(testData.adminUser)
           .end((error, response) => {
+            adminToken = response.body.token;
             expect(response.status).to.equal(201);
             done();
           });
@@ -115,6 +136,7 @@ describe('Users', () => {
       });
     it('Should be able to delete users', (done) => {
       client.delete('/users/1')
+        .set({ 'x-access-token': adminToken })
         .end((error, response) => {
           expect(response.status).to.equal(200);
           done();
@@ -122,6 +144,7 @@ describe('Users', () => {
     });
     it('should return a status code of 404 for invalid delete parameter or if user not found', (done) => {
       client.delete('/users/100')
+        .set({ 'x-access-token': adminToken })
         .end((error, response) => {
           expect(response.status).to.equal(404);
           done();
@@ -129,6 +152,7 @@ describe('Users', () => {
     });
     it('should return 404 response status for a user that is not present in the database', (done) => {
       client.get('/users/300')
+        .set({ 'x-access-token': adminToken })
         .end((error, response) => {
           expect(response.status).equal(404);
           done();

@@ -9,13 +9,12 @@ const expect = chai.expect;
 const client = supertest.agent(app);
 
 describe('Admin Roles:', () => {
-  let adminToken, adminId, regularUserToken, regularUserId, newRoleId, newRoleTitle;
+  let adminToken;
   before((done) => {
     // runs before all tests in this block
     client.post('/users')
       .send(testData.adminUserRole)
-      .end((error, response) => {
-        adminId = response.body.RoleId;
+      .end(() => {
         client.post('/users/login')
           .send(testData.adminUserRole)
           .end((error1, response1) => {
