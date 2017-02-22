@@ -29,7 +29,7 @@
     "url": "https://github.com/andela-tisrael/checkpoint-document-management/issues"
   },
   "homepage": "https://github.com/andela-tisrael/checkpoint-document-management#readme",
-  "devDependencies": {
+  "dependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",
     "babel-eslint": "^7.1.1",
@@ -55,9 +55,7 @@
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "superagent": "^3.4.1",
-    "supertest": "^3.0.0"
-  },
-  "dependencies": {
+    "supertest": "^3.0.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.0",
     "dotenv": "^4.0.0",
