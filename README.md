@@ -8,7 +8,10 @@ This a Javascript implemented document management api with access levels, roles 
 Each document defines access rights; the document defines which roles can access it. Also, each document specifies the date it was published.
 Users are categorized by roles.
 
+#### Postman Collection
+Run the App on `POSTMAN`.
 
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/7b9cef8351c59f45c874)
 #### *Features*
 
 #### *Features*
