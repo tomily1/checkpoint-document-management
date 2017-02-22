@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import jwt from 'jsonwebtoken';
 import db from '../models';
 import Authenticate from '../middleware/auth';

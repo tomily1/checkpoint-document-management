@@ -17,7 +17,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 IndexRoute.Roles(app);
 IndexRoute.Users(app);
 IndexRoute.Documents(app);
-// app.get('/users/:id/documents', DocumentController.fetchUserDocument);
 IndexRoute.Index(app);
 app.listen(port, () => {
   console.log('\nApp running on port ', port);

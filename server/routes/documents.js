@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import express from 'express';
 import DocumentController from '../controllers/documentController';
 import Authenticate from '../middleware/auth';

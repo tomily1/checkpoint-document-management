@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import express from 'express';
 import RoleController from '../controllers/roleController';
 import Authenticator from '../middleware/auth';

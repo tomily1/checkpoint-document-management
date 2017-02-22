@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import express from 'express';
 import UserController from '../controllers/userController';
 import DocumentController from '../controllers/documentController';
