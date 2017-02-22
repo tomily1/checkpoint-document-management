@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-unresolved*/
 import logger from 'fm-log';
 import bcrypt from 'bcrypt-nodejs';
 import db from '../../models';

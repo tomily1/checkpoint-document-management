@@ -1,4 +1,7 @@
 node_modules/*
-dist/*
-server/migrations/*
-server/seeders/*
+dist/**/*.js
+coverage/**/*.js
+server/migrations/*.js
+server/seeders/*.js
+LICENSE
+README.md
