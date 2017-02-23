@@ -1,5 +1,6 @@
-'use strict';
+/* eslint-disable no-underscore-dangle */
 import bcrypt from 'bcrypt-nodejs';
+
 module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define('users', {
     username: {
@@ -29,50 +30,49 @@ module.exports = (sequelize, DataTypes) => {
     },
     RoleId: DataTypes.INTEGER
   }, {
-      classMethods: {
-        associate: (models) => {
-          users.belongsTo(models.Role, {
-            onDelete: 'CASCADE',
-            foreignKey: 'id'
-          })
-          users.hasMany(models.documents, {
-            foreignKey: 'OwnerId',
-            onDelete: 'CASCADE',
-            hooks: true,
-            allowNull: false
-          });
-        }
+    classMethods: {
+      associate: (models) => {
+        users.belongsTo(models.Role, {
+          onDelete: 'CASCADE',
+          foreignKey: 'RoleId'
+        });
+        users.hasMany(models.documents, {
+          foreignKey: 'OwnerId',
+          onDelete: 'CASCADE',
+          hooks: true,
+          allowNull: false
+        });
+      }
+    },
+    instanceMethods: {
+      /**
+        * Compare plain password to user's hashed password
+        * @method
+        * @param {String} password
+        * @returns {Boolean} password match
+        */
+      validPassword(password) {
+        return bcrypt.compareSync(password, this.password);
       },
-      instanceMethods: {
-        /**
-         * Compare plain password to user's hashed password
-         * @method
-         * @param {String} password
-         * @returns {Boolean} password match
-         */
-        validPassword(password) {
-          return bcrypt.compareSync(password, this.password);
-        },
         /**
          * Hash user's password
          * @method
          * @returns {void} no return
          */
-        hashPassword() {
-          this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(8));
-        }
+      hashPassword() {
+        this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(8));
+      }
+    },
+    hooks: {
+      beforeCreate(user) {
+        user.hashPassword();
       },
-      hooks: {
-        beforeCreate(user) {
+      beforeUpdate(user) {
+        if (user._changed.password) {
           user.hashPassword();
-        },
-
-        beforeUpdate(user) {
-          if (user._changed.password) {
-            user.hashPassword();
-          }
         }
       }
-    });
+    }
+  });
   return users;
 };

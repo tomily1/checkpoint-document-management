@@ -1,6 +1,5 @@
-'use strict';
 module.exports = {
-  up: function(queryInterface, Sequelize) {
+  up: function (queryInterface, Sequelize) {
     return queryInterface.createTable('documents', {
       id: {
         allowNull: false,
@@ -15,13 +14,15 @@ module.exports = {
         type: Sequelize.TEXT
       },
       access: {
-      defaultValue: 'public',
-      type: Sequelize.STRING
-     },
+        defaultValue: 'public',
+        type: Sequelize.STRING
+      },
       OwnerId: {
-       type: Sequelize.INTEGER,
-       allowNull: false,
-     },
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -32,7 +33,7 @@ module.exports = {
       }
     });
   },
-  down: function(queryInterface, Sequelize) {
+  down: function (queryInterface, Sequelize) {
     return queryInterface.dropTable('documents');
   }
 };
