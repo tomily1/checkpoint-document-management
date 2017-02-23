@@ -43,13 +43,13 @@ class DocumentController {
           });
         })
         .catch((error) => {
-          response.status(401).send({
+          response.status(400).send({
             success: false,
             message: error.message
           });
         });
     } else {
-      response.status(404).send({
+      response.status(400).send({
         success: false,
         message: 'Some fields are missing'
       });
@@ -152,7 +152,7 @@ class DocumentController {
                   message: 'No Document Found'
                 });
               } else {
-                response.status(201).send({
+                response.status(200).send({
                   success: true,
                   results
                 });
@@ -180,7 +180,7 @@ class DocumentController {
                 message: 'No Document Found'
               });
             } else {
-              response.send({
+              response.status(200).send({
                 success: true,
                 results
               });
@@ -263,7 +263,7 @@ class DocumentController {
           response.status(403).send({
             success: false,
             role: Role,
-            message: 'Forbidden, You are not authorized tos update this document as it doesn\'t belong to you'
+            message: 'You are not authorized to update this document'
           });
         }
       })
@@ -289,12 +289,12 @@ class DocumentController {
           document.destroy()
             .then(() => response.status(201).send({
               success: true,
-              message: `Document ${request.params.id} has been successfully deleted`
+              message: 'Document has been successfully deleted'
             }));
         } else {
           response.status(403).send({
             success: false,
-            message: 'Forbidden, You are not authorized to delete this document as it doesn\'t belong to you'
+            message: 'You are not authorized to delete this document'
           });
         }
       })

@@ -75,16 +75,16 @@ describe('Documents:', () => {
         .send(testData.documentInvalid)
         .set({ 'x-access-token': regularUserToken })
         .end((error, response) => {
-          expect(response.status).to.equal(404);
+          expect(response.status).to.equal(400);
           done();
         });
     });
-    it('Should return error with status code 401 when the inputted document fields are not valid', (done) => {
+    it('Should return error with status code 400 when the inputted document fields are not valid', (done) => {
       client.post('/documents')
         .send(testData.documentNotValid)
         .set({ 'x-access-token': regularUserToken })
         .end((error, response) => {
-          expect(response.status).to.equal(401);
+          expect(response.status).to.equal(400);
           done();
         });
     });
@@ -208,7 +208,7 @@ describe('Documents:', () => {
       client.get('/documents')
         .set({ 'x-access-token': adminUserToken })
         .end((error, response) => {
-          expect(response.status).to.equal(201);
+          expect(response.status).to.equal(200);
           done();
         });
     });
