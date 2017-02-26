@@ -2,7 +2,7 @@
 /* eslint import/no-unresolved: 0 */
 import express from 'express';
 import RoleController from '../controllers/roleController';
-import Authenticator from '../middleware/auth';
+import Authenticator from '../middleware/authenticator';
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@
 /* eslint import/no-unresolved: 0 */
 import jwt from 'jsonwebtoken';
 import db from '../models';
-import Authenticate from '../middleware/auth';
+import Authenticate from '../middleware/authenticator';
 
 const Users = db.users;
 const SECRET_KEY = process.env.SECRET || 'secret';
@@ -27,6 +27,7 @@ class UserController {
       request.body.RoleId
     );
   }
+
   /**
    * Method used to create new user
    * @param{Object} request - Server Request
@@ -57,6 +58,7 @@ class UserController {
       message: 'You did not input your field properly'
     });
   }
+
   /**
    * Method used to delete user
    * only accessible to admin
@@ -81,6 +83,7 @@ class UserController {
         }
       });
   }
+
   /**
    * Method used to Update user info
    * @param{Object} request - Server Request
@@ -112,6 +115,7 @@ class UserController {
         }
       });
   }
+
   /**
    * Method used to fetch all users
    * @param{Object} request - Server Request
@@ -124,6 +128,7 @@ class UserController {
         response.status(201).send(users);
       });
   }
+
   /**
    * Method used to fetch user by their ID
    * @param{Object} request - Server Request
@@ -143,6 +148,7 @@ class UserController {
         }
       });
   }
+
   /**
    * Method used to create new user
    * @param{Object} request - Server Request
@@ -166,6 +172,7 @@ class UserController {
         }
       });
   }
+
   /**
    * Method used to logout user
    * @param{Object} request - Server Request

@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import db from '../models';
 
 const SECRET_KEY = process.env.SECRET || 'secret';
+
 /**
  * Class to implement authentication middlewares
  */
@@ -38,6 +39,7 @@ class Authenticator {
       });
     }
   }
+
   /**
    * Method to generate a token for a user
    * @param{Object} user - User Object
@@ -49,6 +51,7 @@ class Authenticator {
       UserId: user.id
     }, SECRET_KEY, { expiresIn: 86400 });
   }
+
   /**
    * Method to verify that user is an Admin
    * to access Admin endpoints

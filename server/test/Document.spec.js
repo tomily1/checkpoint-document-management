@@ -89,6 +89,7 @@ describe('Documents:', () => {
         });
     });
   });
+
   describe('GET: ==>\n', () => {
     it('should be able to get documents by id', (done) => {
       client.get('/documents/2')
@@ -139,6 +140,7 @@ describe('Documents:', () => {
         });
     });
   });
+
   describe('Update: ==>\n', () => {
     it('User should be able to update their document information', (done) => {
       client.put('/documents/4')
@@ -176,6 +178,7 @@ describe('Documents:', () => {
         });
     });
   });
+
   describe('DELETE: ==>\n', () => {
     it('Users should be able to delete their own documents', (done) => {
       client.delete('/documents/2')

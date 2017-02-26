@@ -12,6 +12,7 @@ const client = supertest.agent(app);
 
 let adminUserToken;
 const testDocument = testData.documentPublic1;
+
 describe('Search', () => {
   const adminUser = testData.adminUserSearch;
   before((done) => {

@@ -9,6 +9,7 @@ const expect = chai.expect;
 const client = supertest.agent(app);
 
 const regularUser = testData.regularUser1;
+
 describe('Users ==> \n', () => {
   describe('Users', () => {
     let regularUserToken, adminToken2;
@@ -194,6 +195,7 @@ describe('Users ==> \n', () => {
         });
     });
   });
+
   describe('logout', () => {
     it('should be able to logout users successfully', (done) => {
       client.post('/users/logout')
