@@ -125,7 +125,6 @@ class DocumentController {
   static fetchDocument(request, response) {
     const searchQuery = request.query.search;
     const searchLimit = request.query.limit;
-    // const roleId = request.decoded.RoleId;
     const userId = request.decoded.UserId;
     let roleId;
     Users.findById(userId).then((user) => { roleId = user.dataValues.roleId; });

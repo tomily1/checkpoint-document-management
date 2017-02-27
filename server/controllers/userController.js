@@ -112,7 +112,10 @@ class UserController {
           });
         }
       }).catch((error) => {
-        console.log(error.message);
+        response.status(401).send({
+          success: false,
+          message: error.message
+        });
       });
   }
   /**

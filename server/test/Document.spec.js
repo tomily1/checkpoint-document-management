@@ -121,7 +121,6 @@ describe('Documents:', () => {
       client.get('/documents/4')
         .set({ 'x-access-token': regularUser2Token })
         .end((error, response) => {
-          console.log(regularUser2Token);
           expect(response.status).to.equal(401);
           done();
         });
