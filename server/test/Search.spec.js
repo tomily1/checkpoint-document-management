@@ -68,4 +68,37 @@ describe('Search', () => {
       done();
     });
   });
+  it('should return documents limited by a specified number with result containing the search terms', (done) => {
+    const searchLimit = 3;
+    const query = 'a';
+    client.get(`/documents/?search=${query}&limit=${searchLimit}`)
+    .set({ 'x-access-token': adminUserToken })
+    .end((error, response) => {
+      expect(response.status).to.equal(200);
+      response.body.results.forEach((document) => {
+        expect(document.title).to.contain(query) || expect(document.content).to.contain(query);
+      });
+      expect(response.body.results.length).to.equal(searchLimit);
+      done();
+    });
+  });
+  it('should return documents limited by a specified number with result containing the search terms', (done) => {
+    const searchLimit = 3;
+    const query = 's' || 'i';
+    client.post('/users')
+      .send(testData.regularUser5)
+      .end((error1, response1) => {
+        const regularToken5 = response1.body.token;
+        client.get(`/documents/?search=${query}&limit=${searchLimit}`)
+          .set({ 'x-access-token': regularToken5 })
+          .end((error, response) => {
+            expect(response.status).to.equal(200);
+            response.body.results.forEach((document) => {
+              expect(document.content).to.contain(query);
+            });
+            expect(response.body.results.length).to.equal(searchLimit);
+            done();
+          });
+      });
+  });
 });

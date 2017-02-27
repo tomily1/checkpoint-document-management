@@ -34,7 +34,7 @@ class Seeder {
       title: 'regular'
     }
     ];
-    return db.Role.bulkCreate(roles);
+    return db.role.bulkCreate(roles);
   }
   /**
   * Generate a hash from plain password string

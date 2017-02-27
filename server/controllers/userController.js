@@ -2,7 +2,7 @@
 /* eslint import/no-unresolved: 0 */
 import jwt from 'jsonwebtoken';
 import db from '../models';
-import Authenticate from '../middleware/auth';
+import Authenticate from '../middleware/authenticator';
 
 const Users = db.users;
 const SECRET_KEY = process.env.SECRET || 'secret';
@@ -42,15 +42,15 @@ class UserController {
           lastName: request.body.lastname,
           password: request.body.password,
           email: request.body.email,
-          RoleId: request.body.RoleId
+          roleId: request.body.RoleId
         })
         .then(user => response.status(201).send({
           success: true,
           message: 'User successfully signed up',
-          RoleId: user.RoleId,
+          RoleId: user.roleId,
           token: Authenticate.generateToken(user)
         }))
-        .catch(error => response.status(500).send(error));
+        .catch(error => response.status(422).send(error));
     }
     response.status(400).send({
       success: false,
@@ -89,7 +89,8 @@ class UserController {
    */
   static updateUser(request, response) {
     const UserId = request.decoded.UserId;
-    const RoleId = request.decoded.RoleId;
+    let RoleId;
+    Users.findById(UserId).then((user) => { RoleId = user.dataValues.roleId; });
     Users.findOne({
       where: { id: request.params.id }
     })
@@ -99,7 +100,7 @@ class UserController {
             user.update(request.body)
               .then(updatedUser => response.status(201).send(updatedUser));
           } else {
-            response.status(403).send({
+            response.status(401).send({
               success: false,
               message: 'Unauthorized'
             });
@@ -110,6 +111,11 @@ class UserController {
             message: 'User not found'
           });
         }
+      }).catch((error) => {
+        response.status(401).send({
+          success: false,
+          message: error.message
+        });
       });
   }
   /**
@@ -154,7 +160,7 @@ class UserController {
       .then((user) => {
         if (user && user.validPassword(request.body.password)) {
           const token = jwt.sign({
-            RoleId: user.RoleId,
+            RoleId: user.roleId,
             UserId: user.id
           }, SECRET_KEY, { expiresIn: 86400 });
           response.status(201).send({ token, expiresIn: 86400 });

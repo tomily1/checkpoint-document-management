@@ -29,12 +29,12 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
-      RoleId: {
+      roleId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Roles',
+          model: 'roles',
           key: 'id',
-          as: 'RoleId',
+          as: 'roleId',
           onInsert: 'CASCADE'
         }
       },

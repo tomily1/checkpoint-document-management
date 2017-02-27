@@ -3,7 +3,7 @@
 
 import express from 'express';
 import DocumentController from '../controllers/documentController';
-import Authenticate from '../middleware/auth';
+import Authenticate from '../middleware/authenticator';
 
 const router = express.Router();
 

@@ -25,6 +25,7 @@ describe('Users ==> \n', () => {
       client.get('/users/1')
         .end((error, response) => {
           expect(response.status).equal(200);
+          expect(response.body).to.have.property('id');
           done();
         });
     });
@@ -41,7 +42,7 @@ describe('Users ==> \n', () => {
         client.post('/users')
           .send(testData.regularUser1)
           .end((error, response) => {
-            expect(response.status).to.equal(500);
+            expect(response.status).to.equal(422);
             done();
           });
       });
@@ -68,35 +69,22 @@ describe('Users ==> \n', () => {
       client.get('/users')
         .set({ 'x-access-token': regularUserToken })
         .end((error, response) => {
-          expect(response.status).to.equal(403);
+          expect(response.status).to.equal(401);
           done();
         });
     });
-    it('Should not be able to update other user details', (done) => {
+    it('should not update details for non existent user', (done) => {
       client.post('/users')
         .send(testData.adminUser4)
         .end((error, response) => {
           adminToken2 = response.body.token;
-          client.put('/users/1')
-            .send({
-              firstname: 'Tomilayo',
-              lastname: 'Israel',
-              password: 'Israel123'
-            })
-            .set({ 'x-access-token': regularUserToken })
+          client.put('/users/100')
+            .send({})
+            .set({ 'x-access-token': adminToken2 })
             .end((error1, response1) => {
-              expect(response1.status).to.equal(403);
+              expect(response1.status).to.equal(404);
               done();
             });
-        });
-    });
-    it('should not update details for non existent user', (done) => {
-      client.put('/users/100')
-        .send({})
-        .set({ 'x-access-token': adminToken2 })
-        .end((error, response) => {
-          expect(response.status).to.equal(404);
-          done();
         });
     });
     it('Admin User should be able to update details of users', (done) => {
@@ -187,7 +175,7 @@ describe('Users ==> \n', () => {
     });
     it('should not authenticate for invalid credentials', (done) => {
       client.post('/users/login')
-        .send(testData.regularUser5)
+        .send(testData.regularUser4)
         .end((error, response) => {
           expect(response.status).to.equal(401);
           done();
