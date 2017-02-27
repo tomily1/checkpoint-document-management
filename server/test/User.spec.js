@@ -81,8 +81,8 @@ describe('Users ==> \n', () => {
           client.put('/users/100')
             .send({})
             .set({ 'x-access-token': adminToken2 })
-            .end((error, response) => {
-              expect(response.status).to.equal(404);
+            .end((error1, response1) => {
+              expect(response1.status).to.equal(404);
               done();
             });
         });
