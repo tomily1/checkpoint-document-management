@@ -28,13 +28,16 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true
       }
     },
-    RoleId: DataTypes.INTEGER
+    roleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     classMethods: {
       associate: (models) => {
-        users.belongsTo(models.Role, {
+        users.belongsTo(models.role, {
           onDelete: 'CASCADE',
-          foreignKey: 'RoleId'
+          foreignKey: 'roleId'
         });
         users.hasMany(models.documents, {
           foreignKey: 'OwnerId',

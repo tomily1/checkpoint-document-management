@@ -1,6 +1,7 @@
 import db from '../models';
 
 const Documents = db.documents;
+const Users = db.users;
 
 /**
  * Controller for document management
@@ -64,42 +65,45 @@ class DocumentController {
    * @return {Void} - returns Void
    */
   static fetchDocuments(request, response) {
+    const UserId = request.decoded.UserId;
+    let RoleId;
+    Users.findById(UserId).then((user) => { RoleId = user.dataValues.roleId; });
     Documents.findOne({
       where: {
         id: request.params.id
       },
       include: [{
         model: db.users,
-        attributes: ['RoleId']
+        attributes: ['roleId']
       }]
     }).then((result) => {
       const document = result ? result.dataValues : null;
       if (document) {
         // if the requester's role id is Admin, allow unrestricted access
-        if (request.decoded.RoleId === 1) {
+        if (RoleId === 1) {
           response.status(200).send({
             success: true,
             message: 'Document found',
             document
           });
-        } else if ((document.access === 'public' ||
-          document.user.dataValues.RoleId === request.decoded.RoleId)
-          && document.access !== 'private') {
+        } else if ((document.access === 'public') ||
+          (document.user.roleId === RoleId
+            && document.access !== 'private')) {
           response.status(200).send({
             success: true,
             message: 'Document Found',
             document
           });
-        } else if (document.access === 'private' && document.OwnerId === request.decoded.UserId) {
+        } else if (document.access === 'private' && document.OwnerId === UserId) {
           response.status(200).send({
             success: true,
             message: 'Document Found',
             document
           });
         } else {
-          response.status(403).send({
+          response.status(401).send({
             success: false,
-            message: 'Forbidden!, You are forbidden to access this document'
+            message: 'You cannot access this document'
           });
         }
       } else {
@@ -121,8 +125,10 @@ class DocumentController {
   static fetchDocument(request, response) {
     const searchQuery = request.query.search;
     const searchLimit = request.query.limit;
-    const roleId = request.decoded.RoleId;
+    // const roleId = request.decoded.RoleId;
     const userId = request.decoded.UserId;
+    let roleId;
+    Users.findById(userId).then((user) => { roleId = user.dataValues.roleId; });
     const queryBuilder = {
       attributes: ['id', 'OwnerId', 'access', 'title', 'content', 'createdAt'],
       order: '"createdAt" DESC'
@@ -130,7 +136,7 @@ class DocumentController {
     if (searchLimit) {
       queryBuilder.limit = searchLimit;
     }
-    db.Role.findById(roleId)
+    db.role.findById(roleId)
       .then((role) => {
         if (role && role.title === 'admin') {
           if (searchQuery) {
@@ -199,45 +205,42 @@ class DocumentController {
   static fetchUserDocument(request, response) {
     const queryId = request.params.id;
     const ownerId = request.decoded.UserId;
-    const roleId = request.decoded.RoleId;
-    db.Role.findById(roleId).then((role) => {
-      if (role) {
-        if (ownerId === queryId || role.title === 'admin') {
-          Documents.findAll({
-            where: {
-              OwnerId: queryId
-            }
-          }).then((document) => {
-            if (document < 1) {
-              return response.status(404).send({
-                success: false,
-                message: 'No documents found'
-              });
-            }
-            const results = document;
-            return response.status(200).send(results);
-          });
-        } else {
-          Documents.findAll({
-            where: {
-              OwnerId: queryId,
-              $and: {
-                access: 'public'
-              }
-            }
-          }).then((document) => {
-            if (document < 1) {
-              return response.status(404).send({
-                success: false,
-                message: 'No documents found'
-              });
-            }
-            const results = document;
-            return response.status(200).send(results);
+    let roleId;
+    Users.findById(ownerId).then((user) => { roleId = user.dataValues.roleId; });
+    if (ownerId === queryId || roleId === 1) {
+      Documents.findAll({
+        where: {
+          OwnerId: queryId
+        }
+      }).then((document) => {
+        if (document < 1) {
+          return response.status(404).send({
+            success: false,
+            message: 'No documents found'
           });
         }
-      }
-    });
+        const results = document;
+        return response.status(200).send(results);
+      });
+    } else {
+      Documents.findAll({
+        where: {
+          OwnerId: queryId,
+          $and: {
+            access: 'public'
+          }
+        }
+      }).then((document) => {
+        if (document < 1) {
+          return response.status(404).send({
+            success: false,
+            message: 'No documents found'
+          });
+        }
+        const results = document;
+        return response.status(200).send(results);
+      });
+    }
   }
   /**
    * Edit and Update User documents in the database
@@ -248,7 +251,8 @@ class DocumentController {
    */
   static updateDocument(request, response) {
     const Owner = request.decoded.UserId;
-    const Role = request.decoded.RoleId;
+    let Role;
+    Users.findById(Owner).then((user) => { Role = user.dataValues.roleId; });
     Documents.findOne({
       where: {
         id: request.params.id
@@ -260,7 +264,7 @@ class DocumentController {
             .then(updatedDocument => response.status(201).send(updatedDocument))
             .catch(error => response.status(401).send(error));
         } else {
-          response.status(403).send({
+          response.status(401).send({
             success: false,
             role: Role,
             message: 'You are not authorized to update this document'
@@ -278,7 +282,8 @@ class DocumentController {
    */
   static deleteDocument(request, response) {
     const Owner = request.decoded.UserId;
-    const Role = request.decoded.RoleId;
+    let Role;
+    Users.findById(Owner).then((user) => { Role = user.dataValues.roleId; });
     Documents.findOne({
       where: {
         id: request.params.id

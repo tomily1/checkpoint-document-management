@@ -45,7 +45,7 @@ class Authenticator {
    */
   static generateToken(user) {
     return jwt.sign({
-      RoleId: user.RoleId,
+      // RoleId: user.roleId,
       UserId: user.id
     }, SECRET_KEY, { expiresIn: 86400 });
   }
@@ -58,17 +58,16 @@ class Authenticator {
    * @return{Void} - returns Void
    */
   static authenticateAdmin(request, response, next) {
-    db.Role.findOne({ where: { id: request.decoded.RoleId } })
-      .then((role) => {
-        if (role.title === 'admin') {
-          next();
-        } else {
-          response.status(403).send({
-            success: false,
-            message: 'You are not permitted to perform this operation'
-          });
-        }
-      });
+    db.users.findById(request.decoded.UserId).then((user) => {
+      if (user.dataValues.roleId === 1) {
+        next();
+      } else {
+        response.status(401).send({
+          success: false,
+          message: 'You are not permitted to perform this operation'
+        });
+      }
+    });
   }
 }
 export default Authenticator;

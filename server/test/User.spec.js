@@ -68,35 +68,22 @@ describe('Users ==> \n', () => {
       client.get('/users')
         .set({ 'x-access-token': regularUserToken })
         .end((error, response) => {
-          expect(response.status).to.equal(403);
+          expect(response.status).to.equal(401);
           done();
         });
     });
-    it('Should not be able to update other user details', (done) => {
+    it('should not update details for non existent user', (done) => {
       client.post('/users')
         .send(testData.adminUser4)
         .end((error, response) => {
           adminToken2 = response.body.token;
-          client.put('/users/1')
-            .send({
-              firstname: 'Tomilayo',
-              lastname: 'Israel',
-              password: 'Israel123'
-            })
-            .set({ 'x-access-token': regularUserToken })
-            .end((error1, response1) => {
-              expect(response1.status).to.equal(403);
+          client.put('/users/100')
+            .send({})
+            .set({ 'x-access-token': adminToken2 })
+            .end((error, response) => {
+              expect(response.status).to.equal(404);
               done();
             });
-        });
-    });
-    it('should not update details for non existent user', (done) => {
-      client.put('/users/100')
-        .send({})
-        .set({ 'x-access-token': adminToken2 })
-        .end((error, response) => {
-          expect(response.status).to.equal(404);
-          done();
         });
     });
     it('Admin User should be able to update details of users', (done) => {

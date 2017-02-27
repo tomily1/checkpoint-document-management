@@ -121,7 +121,8 @@ describe('Documents:', () => {
       client.get('/documents/4')
         .set({ 'x-access-token': regularUser2Token })
         .end((error, response) => {
-          expect(response.status).to.equal(403);
+          console.log(regularUser2Token);
+          expect(response.status).to.equal(401);
           done();
         });
     });
@@ -154,7 +155,7 @@ describe('Documents:', () => {
         .set({ 'x-access-token': regularUser2Token })
         .send(testData.documentPrivate3)
         .end((error, response) => {
-          expect(response.status).to.equal(403);
+          expect(response.status).to.equal(401);
           done();
         });
     });

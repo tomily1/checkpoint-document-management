@@ -1,6 +1,6 @@
 import db from '../models';
 
-const Roles = db.Role;
+const Roles = db.role;
 /**
  * Class to implement Role controlllers
  */

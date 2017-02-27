@@ -1,7 +1,7 @@
 # Document Management System API
 [![Code Climate](https://codeclimate.com/github/andela-tisrael/checkpoint-document-management/badges/gpa.svg)](https://codeclimate.com/github/andela-tisrael/checkpoint-document-management)
 [![Coverage Status](https://coveralls.io/repos/github/andela-tisrael/checkpoint-document-management/badge.svg?branch=chore%2F139349607%2Fsetup-api-tests)](https://coveralls.io/github/andela-tisrael/checkpoint-document-management?branch=chore%2F139349607%2Fsetup-api-tests)
-[![Build Status](https://travis-ci.org/andela-tisrael/checkpoint-document-management.svg?branch=master)](https://travis-ci.org/andela-tisrael/checkpoint-document-management)
+[![Build Status](https://travis-ci.org/andela-tisrael/checkpoint-document-management.svg?branch=development)](https://travis-ci.org/andela-tisrael/checkpoint-document-management)
 
 ### About Document Management Systems
 This a Javascript implemented document management api with access levels, roles and priviledges.
