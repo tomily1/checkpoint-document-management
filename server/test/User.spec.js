@@ -25,6 +25,7 @@ describe('Users ==> \n', () => {
       client.get('/users/1')
         .end((error, response) => {
           expect(response.status).equal(200);
+          expect(response.body).to.have.property('id');
           done();
         });
     });
@@ -41,7 +42,7 @@ describe('Users ==> \n', () => {
         client.post('/users')
           .send(testData.regularUser1)
           .end((error, response) => {
-            expect(response.status).to.equal(500);
+            expect(response.status).to.equal(422);
             done();
           });
       });
@@ -174,7 +175,7 @@ describe('Users ==> \n', () => {
     });
     it('should not authenticate for invalid credentials', (done) => {
       client.post('/users/login')
-        .send(testData.regularUser5)
+        .send(testData.regularUser4)
         .end((error, response) => {
           expect(response.status).to.equal(401);
           done();

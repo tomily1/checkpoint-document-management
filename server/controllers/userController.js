@@ -50,7 +50,7 @@ class UserController {
           RoleId: user.roleId,
           token: Authenticate.generateToken(user)
         }))
-        .catch(error => response.status(500).send(error));
+        .catch(error => response.status(422).send(error));
     }
     response.status(400).send({
       success: false,

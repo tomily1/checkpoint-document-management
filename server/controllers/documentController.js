@@ -21,6 +21,7 @@ class DocumentController {
       request.decoded.UserId
     );
   }
+
   /**
    * Method used to create new Document for a particular user
    * @param{Object} request - Server Request
@@ -56,6 +57,7 @@ class DocumentController {
       });
     }
   }
+
   /**
    * Fetch specific document in the database
    * Admin has access to all the documents
@@ -114,6 +116,7 @@ class DocumentController {
       }
     });
   }
+
   /**
    * Fetch specific document in the database
    * Admin has access to all the documents
@@ -127,59 +130,35 @@ class DocumentController {
     const searchLimit = request.query.limit;
     const userId = request.decoded.UserId;
     let roleId;
-    Users.findById(userId).then((user) => { roleId = user.dataValues.roleId; });
-    const queryBuilder = {
-      attributes: ['id', 'OwnerId', 'access', 'title', 'content', 'createdAt'],
-      order: '"createdAt" DESC'
-    };
-    if (searchLimit) {
-      queryBuilder.limit = searchLimit;
-    }
-    db.role.findById(roleId)
-      .then((role) => {
-        if (role && role.title === 'admin') {
-          if (searchQuery) {
-            queryBuilder.where = {
-              $or: [{
-                title:
-                { $like: `%${searchQuery}%` }
-              }, {
-                content:
-                { $like: `%${searchQuery}%` }
-              }]
-            };
-          }
-          Documents.findAll(queryBuilder)
-            .then((results) => {
-              if (results < 1) {
-                response.status(404).send({
-                  success: false,
-                  message: 'No Document Found'
-                });
-              } else {
-                response.status(200).send({
-                  success: true,
-                  results
-                });
-              }
-            });
-        } else {
-          if (searchQuery) {
-            queryBuilder.where = {
-              $or: [
-                { title: { $like: `%${searchQuery}%` } },
-                { content: { $like: `%${searchQuery}%` } }
-              ],
-              $and: {
-                $or: [
-                  { access: 'public' },
-                  { OwnerId: userId }
-                ]
-              }
-            };
-          }
-          Documents.findAll(queryBuilder).then((results) => {
-            if (results < 1) {
+    Users.findById(userId).then((user) => {
+      roleId = user.roleId;
+      const queryBuilder = {
+        attributes: ['id', 'OwnerId', 'access', 'title', 'content', 'createdAt'],
+        order: '"createdAt" DESC',
+        include: [{
+          model: db.users,
+          attributes: ['roleId']
+        }]
+      };
+      if (searchLimit) {
+        queryBuilder.limit = searchLimit;
+      }
+
+      if (roleId === 1) {
+        if (searchQuery) {
+          queryBuilder.where = {
+            $or: [{
+              title:
+              { $like: `%${searchQuery}%` }
+            }, {
+              content:
+              { $like: `%${searchQuery}%` }
+            }]
+          };
+        }
+        Documents.findAll(queryBuilder)
+          .then((results) => {
+            if (results.length < 1) {
               response.status(404).send({
                 success: false,
                 message: 'No Document Found'
@@ -191,9 +170,41 @@ class DocumentController {
               });
             }
           });
+      } else {
+        if (searchQuery) {
+          queryBuilder.where = {
+            $or: [
+              { title: { $like: `%${searchQuery}%` } },
+              { content: { $like: `%${searchQuery}%` } }
+            ],
+            $and: {
+              $or: [
+                { access: 'public' },
+                { OwnerId: userId }
+              ]
+            }
+          };
         }
-      });
+        Documents.findAll(queryBuilder).then((results) => {
+          const accessibleDocuments = results.filter((document) => {
+            if ((document.access === 'public') ||
+              (document.user.roleId === roleId
+                && document.access !== 'private')) {
+              return true;
+            } else if (document.access === 'private' && document.OwnerId === userId) {
+              return true;
+            }
+            return false;
+          });
+          response.status(200).send({
+            success: true,
+            results: accessibleDocuments
+          });
+        });
+      }
+    });
   }
+
   /**
    * Fetch all the documents belonging to a particular user
    * Users have access to their own documents and all other public and role access documents
@@ -205,42 +216,45 @@ class DocumentController {
     const queryId = request.params.id;
     const ownerId = request.decoded.UserId;
     let roleId;
-    Users.findById(ownerId).then((user) => { roleId = user.dataValues.roleId; });
-    if (ownerId === queryId || roleId === 1) {
-      Documents.findAll({
-        where: {
-          OwnerId: queryId
-        }
-      }).then((document) => {
-        if (document < 1) {
-          return response.status(404).send({
-            success: false,
-            message: 'No documents found'
-          });
-        }
-        const results = document;
-        return response.status(200).send(results);
-      });
-    } else {
-      Documents.findAll({
-        where: {
-          OwnerId: queryId,
-          $and: {
-            access: 'public'
+    Users.findById(ownerId).then((user) => {
+      roleId = user.dataValues.roleId;
+      if (ownerId === queryId || roleId === 1) {
+        Documents.findAll({
+          where: {
+            OwnerId: queryId
           }
-        }
-      }).then((document) => {
-        if (document < 1) {
-          return response.status(404).send({
-            success: false,
-            message: 'No documents found'
-          });
-        }
-        const results = document;
-        return response.status(200).send(results);
-      });
-    }
+        }).then((document) => {
+          if (document.length < 1) {
+            return response.status(404).send({
+              success: false,
+              message: 'No documents found'
+            });
+          }
+          const results = document;
+          return response.status(200).send(results);
+        });
+      } else {
+        Documents.findAll({
+          where: {
+            OwnerId: queryId,
+            $and: {
+              access: 'public'
+            }
+          }
+        }).then((document) => {
+          if (document.length < 1) {
+            return response.status(404).send({
+              success: false,
+              message: 'No documents found'
+            });
+          }
+          const results = document;
+          return response.status(200).send(results);
+        });
+      }
+    });
   }
+
   /**
    * Edit and Update User documents in the database
    * Users only have access to their own documents
@@ -272,6 +286,7 @@ class DocumentController {
       })
       .catch(error => response.status(401).send(error));
   }
+
   /**
    * Delete User documents in the database
    * Users only have access to their own documents
@@ -304,6 +319,5 @@ class DocumentController {
       })
       .catch(error => response.status(401).send(error));
   }
-
 }
 export default DocumentController;
