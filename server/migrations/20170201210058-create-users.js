@@ -1,4 +1,3 @@
-'use strict';
 module.exports = {
   up: function(queryInterface, Sequelize) {
     return queryInterface.createTable('users', {
@@ -30,8 +29,14 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
-      RoleId: {
-        type: Sequelize.INTEGER
+      roleId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'roles',
+          key: 'id',
+          as: 'roleId',
+          onInsert: 'CASCADE'
+        }
       },
       createdAt: {
         allowNull: false,

@@ -1,14 +1,21 @@
-import db from '../models';
+/* eslint import/no-extraneous-dependencies: 0 */
+/* eslint import/no-unresolved: 0 */
 import jwt from 'jsonwebtoken';
+import db from '../models';
+import Authenticate from '../middleware/authenticator';
+
 const Users = db.users;
 const SECRET_KEY = process.env.SECRET || 'secret';
 
+/**
+ * Controller for Users
+ */
 class UserController {
   /**
-    * Method to set the various user routes
-    * @param{Object} app - Express app
-    * @return{Void}
-    */
+   * Method to set the various document routes
+   * @param{Object} request - Server request
+   * @return{Object} return request parameters
+   */
   static postRequest(request) {
     return (
       request.body &&
@@ -18,13 +25,14 @@ class UserController {
       request.body.password &&
       request.body.email &&
       request.body.RoleId
-    )
+    );
   }
   /**
-    * Method to create a new user
-    * @param{Object} app - Express app
-    * @return{Void}
-    */
+   * Method used to create new user
+   * @param{Object} request - Server Request
+   * @param{Object} response - Server Response
+   * @returns{Void} return Void
+   */
   static createUser(request, response) {
     if (UserController.postRequest(request)) {
       return Users
@@ -34,77 +42,100 @@ class UserController {
           lastName: request.body.lastname,
           password: request.body.password,
           email: request.body.email,
-          RoleId: request.body.RoleId
+          roleId: request.body.RoleId
         })
-        .then(user => response.status(201).send(user))
-        .catch(error => response.status(401).send(error));
+        .then(user => response.status(201).send({
+          success: true,
+          message: 'User successfully signed up',
+          RoleId: user.roleId,
+          token: Authenticate.generateToken(user)
+        }))
+        .catch(error => response.status(422).send(error));
     }
+    response.status(400).send({
+      success: false,
+      message: 'You did not input your field properly'
+    });
   }
   /**
-   * 
+   * Method used to delete user
+   * only accessible to admin
+   * @param{Object} request - Server Request
+   * @param{Object} response - Server Response
+   * @returns{Void} return Void
    */
   static deleteUser(request, response) {
     Users.findOne({ where: { id: request.params.id } })
-      .then(user => {
+      .then((user) => {
         if (user) {
           user.destroy()
             .then(() => response.status(200).send({
               success: true,
               message: 'User Successfully deleted from database'
-            }))
-            .catch(error => response.status(401).send(error));
+            }));
         } else {
           response.status(404).send({
             success: false,
             message: 'User not found'
-          })
+          });
         }
-      })
-      .catch(error => response.status(401).send(error));
+      });
   }
   /**
-   * 
+   * Method used to Update user info
+   * @param{Object} request - Server Request
+   * @param{Object} response - Server Response
+   * @returns{Void} return Void
    */
   static updateUser(request, response) {
+    const UserId = request.decoded.UserId;
+    let RoleId;
+    Users.findById(UserId).then((user) => { RoleId = user.dataValues.roleId; });
     Users.findOne({
       where: { id: request.params.id }
     })
-    .then(user => {
-      if(user) {
-        user.update(request.body)
-        .then(updatedUser => response.status(201).send(updatedUser))
-        .catch(error => response.status(401).send(error));
-      } else {
-        response.status(404).send({
-          success: false,
-          message: "User not found"
-        });
-      }
-    })
-    .catch(error => response.status(401).send(error));
-  }
-  /**
-   * 
-   */
-  static fetchAllUsers(request, response) {
-    Users.findAll({})
-      .then(users => {
-        if (users) {
-          response.status(201).send(users);
+      .then((user) => {
+        if (user) {
+          if (UserId === user.dataValues.id || RoleId === 1) {
+            user.update(request.body)
+              .then(updatedUser => response.status(201).send(updatedUser));
+          } else {
+            response.status(401).send({
+              success: false,
+              message: 'Unauthorized'
+            });
+          }
         } else {
           response.status(404).send({
             success: false,
-            message: 'No user on this database'
-          })
+            message: 'User not found'
+          });
         }
-      })
-      .catch(error => response.status(401).send(error));
+      }).catch((error) => {
+        response.status(401).send({
+          success: false,
+          message: error.message
+        });
+      });
   }
   /**
-    * Method to fetch all the users on the database
-    * @param{Object} app - Express app
-    * @return{Void}
-    */
+   * Method used to fetch all users
+   * @param{Object} request - Server Request
+   * @param{Object} response - Server Response
+   * @returns{Void} return Void
+   */
+  static fetchAllUsers(request, response) {
+    Users.findAll({})
+      .then((users) => {
+        response.status(201).send(users);
+      });
+  }
+  /**
+   * Method used to fetch user by their ID
+   * @param{Object} request - Server Request
+   * @param{Object} response - Server Response
+   * @returns{Void} return Void
+   */
   static fetchUser(request, response) {
     Users.findOne({ where: { id: request.params.id } })
       .then((user) => {
@@ -116,43 +147,42 @@ class UserController {
             message: 'User not found'
           });
         }
-      })
-      .catch((error) => {
-        response.status(400).send({
-          error
-        });
       });
   }
   /**
-   * 
+   * Method used to create new user
+   * @param{Object} request - Server Request
+   * @param{Object} response - Server Response
+   * @returns{Void} return Void
    */
   static loginUser(request, response) {
-    Users.findOne({where:{email: request.body.email}})
-      .then(user => {
-         if(user && user.validPassword(request.body.password)){
+    Users.findOne({ where: { email: request.body.email } })
+      .then((user) => {
+        if (user && user.validPassword(request.body.password)) {
           const token = jwt.sign({
-            RoleId: user.RoleId,
+            RoleId: user.roleId,
             UserId: user.id
           }, SECRET_KEY, { expiresIn: 86400 });
-          response.status(201).send({token, expiresIn: 86400})
+          response.status(201).send({ token, expiresIn: 86400 });
         } else {
           response.status(401).send({
             success: false,
-            message: 'Failed to Authenticate User, Invalid Password or Email'
-          })
+            message: 'Failed to Authenticate User, Invalid Credentials'
+          });
         }
-      })
-      .catch(error => response.status(404).send({
-        message: 'Error!'
-      }));
+      });
   }
   /**
-   * 
+   * Method used to logout user
+   * @param{Object} request - Server Request
+   * @param{Object} response - Server Response
+   * @returns{Void} return Void
    */
   static logoutUser(request, response) {
     response.send({
+      success: true,
       message: 'User logged out successfully'
-    })
+    });
   }
 }
 export default UserController;
