@@ -1,0 +1,194 @@
+#app {
+  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #4d4d4d;
+  min-width: 550px;
+  max-width: 850px;
+  margin: 0 auto;
+}
+a {
+  color: #868c96;
+}
+a.active {
+  color: #fff;
+}
+.create-account:hover {
+  color: #3f51b5;
+}
+h1 {
+   color: #fff;
+}
+.navbar{
+  position: fixed;
+  top: 0;
+  bottom: 50%;
+  left: 4px;
+  width: 100%;
+  z-index: 1000;
+}
+.nav-edge {
+  float: right;
+  margin-right: 15px;
+}
+
+/* Create Document Styles */
+.document-title {
+  color: #fff;
+}
+.create-document {
+  margin-top: 150px;
+}
+#document-button {
+  margin-top: 15px;
+  width: 100px;
+  /*margin-left: 500px;*/
+}
+.document-form {
+  text-align: center;
+}
+.about-page {
+  margin-top: 100px;
+  color: #fff;
+}
+.jumbotron{
+  margin-top: 150px;
+}
+nav {
+  padding-top: 20px;
+  width: 100% !important;
+  padding-bottom: 20px;
+  margin-bottom: 50px;
+  background-color: #273143;
+}
+#background {
+  background-color: #303b4f;
+}
+
+/* create documents buttons */
+.buttonHolder{
+  margin-top: 10px !important;
+  margin:80px auto;
+  width:400px;
+}
+
+
+		.button{
+			background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+			background-image: linear-gradient(top, #f4f1ee, #fff);
+			border-radius: 50%;
+			box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
+			float:left;
+			height: 70px;
+			margin: 0 30px 30px 0;
+			position: relative;
+			width: 70px;			
+			-webkit-transition: all .1s linear;
+			transition: all .1s linear;
+		}
+
+		.button:after{
+			color:#e9e6e4;
+			content: "";
+			display: block;
+			font-size: 30px;
+			height: 30px;
+			text-decoration: none;
+			text-shadow: 0px -1px 1px #bdb5b4, 1px 1px 1px white;
+			position: absolute;
+			width: 30px;
+		}
+
+
+		.heart:after{
+			content: "❤";
+			left: 21px;
+			top: 21px;
+		}
+
+		.flower:after{
+			content: "✿";
+			left: 23px;
+			top: 19px;
+		}
+
+		.tick:after{
+			content: "✔";
+			left:23px;
+			top:20px;
+		}
+
+		.cross:after{
+			content: "✖";
+			left: 24px;
+			top: 19px;
+		}
+
+		.button:hover{
+			background-image: -webkit-linear-gradient(top, #fff, #f4f1ee);
+			background-image: linear-gradient(top, #fff, #f4f1ee);
+			color:#0088cc;
+		}
+
+		.heart:hover:after{
+			color:#f94e66;
+			text-shadow:0px 0px 6px #f94e66;
+		}
+
+		.flower:hover:after{
+			color:#f99e4e;
+			text-shadow:0px 0px 6px #f99e4e;
+		}
+
+		.tick:hover:after{
+			color:#83d244;
+			text-shadow:0px 0px 6px #83d244;
+		}
+
+		.cross:hover:after{
+			color:#eb2f2f;
+			text-shadow:0px 0px 6px #eb2f2f;
+		}
+
+		
+
+		.button:active{
+			background-image: -webkit-linear-gradient(top, #efedec, #f7f4f4);
+			background-image: linear-gradient(top, #efedec, #f7f4f4);
+			box-shadow: 0 3px 5px 0 rgba(0,0,0,.4), inset 0px -3px 1px 1px rgba(204,198,197,.5);
+		}
+
+		.button:active:after{
+			color:#dbd2d2;
+			text-shadow: 0px -1px 1px #bdb5b4, 0px 1px 1px white;
+		}
+
+    /* Login Page */
+    .logform{
+      display: inline-block; 
+      padding: 32px 48px 0px 48px; 
+      border: 1px solid #EEE;
+      }
+      .forgot{
+      float: right;
+      }
+       main {
+      flex: 1 0 auto;
+    }
+
+    body {
+      background: #fff;
+    }
+
+    .input-field input[type=date]:focus + label,
+    .input-field input[type=text]:focus + label,
+    .input-field input[type=email]:focus + label,
+    .input-field input[type=password]:focus + label {
+      color: #e91e63;
+    }
+
+    .input-field input[type=date]:focus,
+    .input-field input[type=text]:focus,
+    .input-field input[type=email]:focus,
+    .input-field input[type=password]:focus {
+      border-bottom: 2px solid #e91e63;
+      box-shadow: none;
+    }
