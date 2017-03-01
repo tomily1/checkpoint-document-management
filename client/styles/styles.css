@@ -28,6 +28,7 @@ h1 {
 .nav-edge {
   float: right;
   margin-right: 15px;
+  /*display: inline-block !important;*/
 }
 
 /* Create Document Styles */
@@ -192,3 +193,19 @@ nav {
       border-bottom: 2px solid #e91e63;
       box-shadow: none;
     }
+
+/*Dashboard styles*/
+.dashboard {
+  position: fixed;
+  left: 4%;
+  margin-top: 60px;
+  color: #fff;
+}
+
+/*Profile Styles*/
+.profile {
+  position: fixed;
+  left: 4%;
+  margin-top: 60px;
+  color: #fff;
+}

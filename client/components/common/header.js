@@ -7,10 +7,16 @@ const Header = () => {
       <div className="navbar-wrapper">
         <IndexLink to="/" activeClassName="active">Home</IndexLink>
         {' | '}
+        <Link to="/dashboard" activeClassName="active">Dashboard</Link>
+        {' | '}
         <Link to="/documents" activeClassName="active">Documents</Link>
         {' | '}
         <Link to="/about" activeClassName="active">About</Link>
         <div className="nav-edge">
+          <Link to="/profile" activeClassName="active">Profile</Link>
+          {' | '}
+          <Link to="/signup" activeClassName="active">Sign up</Link>
+          {' | '}
           <Link to="/login" activeClassName="active">Login</Link>
         </div>
       </div>
