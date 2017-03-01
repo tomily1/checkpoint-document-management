@@ -37,19 +37,19 @@ class DocumentController {
           access: request.body.access ? request.body.access : 'public',
           OwnerId: request.decoded.UserId,
         })
-        .then((document) => {
-          response.status(201).send({
-            success: true,
-            message: 'Document successfully created',
-            document: document.dataValues
-          });
-        })
-        .catch((error) => {
-          response.status(400).send({
-            success: false,
-            message: error.message
-          });
-        });
+          .then((document) => {
+            response.status(201).send({
+              success: true,
+              message: 'Document successfully created',
+              document: document.dataValues
+            });
+          })
+            .catch((error) => {
+              response.status(400).send({
+                success: false,
+                message: error.message
+              });
+            });
     } else {
       response.status(400).send({
         success: false,
@@ -284,7 +284,7 @@ class DocumentController {
           });
         }
       })
-      .catch(error => response.status(401).send(error));
+        .catch(error => response.status(401).send(error));
   }
 
   /**
@@ -317,7 +317,7 @@ class DocumentController {
           });
         }
       })
-      .catch(error => response.status(401).send(error));
+        .catch(error => response.status(401).send(error));
   }
 }
 export default DocumentController;

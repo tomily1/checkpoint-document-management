@@ -191,4 +191,13 @@ describe('Users ==> \n', () => {
         });
     });
   });
+  describe('Catch all route', () => {
+    it('For invalid GET URl, it should redirect user back to the homepage', (done) => {
+      client.get('/asjhbcnsincewe')
+      .end((error, response) => {
+        expect(response.status).to.equal(200);
+        done();
+      });
+    });
+  });
 });
