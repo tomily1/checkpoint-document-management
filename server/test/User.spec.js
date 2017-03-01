@@ -88,7 +88,7 @@ describe('Users ==> \n', () => {
         });
     });
     it('Admin User should be able to update details of users', (done) => {
-      client.put('/users/1')
+      client.put('/users/2')
         .send({
           firstname: 'Tomilayo',
           lastname: 'Israel',

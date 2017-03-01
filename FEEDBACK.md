@@ -10,7 +10,7 @@
 
 #### Pivotal Tracker
 1. Full blown story and ticket for each api module
-2. 
+2. Differentiate between features and chores 
 
 #### User Test
 1. Line 27, include user id

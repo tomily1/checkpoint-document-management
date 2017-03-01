@@ -103,6 +103,14 @@ describe('Documents:', () => {
             });
         });
     });
+    it('should not authorize access to public documents if user has an invalid token', (done) => {
+      client.get('/documents/2')
+        .set({ 'x-access-token': 'regularUserToken' })
+        .end((error, response) => {
+          expect(response.status).to.equal(401);
+          done();
+        });
+    });
     it('Should return status code of 404 for document not found', (done) => {
       client.get('/documents/200')
         .set({ 'x-access-token': regularUserToken })
