@@ -88,7 +88,7 @@ describe('Users ==> \n', () => {
         });
     });
     it('Admin User should be able to update details of users', (done) => {
-      client.put('/users/1')
+      client.put('/users/2')
         .send({
           firstname: 'Tomilayo',
           lastname: 'Israel',
@@ -189,6 +189,15 @@ describe('Users ==> \n', () => {
           expect(response.body.success).to.equal(true);
           done();
         });
+    });
+  });
+  describe('Catch all route', () => {
+    it('For invalid GET URl, it should redirect user back to the homepage', (done) => {
+      client.get('/asjhbcnsincewe')
+      .end((error, response) => {
+        expect(response.status).to.equal(200);
+        done();
+      });
     });
   });
 });
