@@ -1,4 +1,4 @@
-CREATE TABLE public."Roles"
+CREATE TABLE public."role"
 (
   id integer PRIMARY KEY,
   title character varying(255) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE public."users"
   password character varying(255) NOT NULL,
   createdAt timestamp with time zone NOT NULL,
   updatedAt timestamp with time zone NOT NULL,
-  roleId integer REFERENCES "Roles" ON DELETE CASCADE DEFAULT 2
+  roleId integer REFERENCES "role" ON DELETE CASCADE DEFAULT 2
 );
 
 CREATE TABLE public."documents"
@@ -27,6 +27,6 @@ CREATE TABLE public."documents"
   public boolean DEFAULT false,
   createdAt timestamp with time zone NOT NULL,
   updatedAt timestamp with time zone NOT NULL,
-  roleId integer REFERENCES "Roles" ON DELETE CASCADE,
+  roleId integer REFERENCES "role" ON DELETE CASCADE,
   ownerId integer REFERENCES "users" ON DELETE CASCADE
 );

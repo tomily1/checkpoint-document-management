@@ -36,20 +36,18 @@ class DocumentController {
           content: request.body.content,
           access: request.body.access ? request.body.access : 'public',
           OwnerId: request.decoded.UserId,
-        })
-          .then((document) => {
-            response.status(201).send({
-              success: true,
-              message: 'Document successfully created',
-              document: document.dataValues
-            });
-          })
-            .catch((error) => {
-              response.status(400).send({
-                success: false,
-                message: error.message
-              });
-            });
+        }).then((document) => {
+          response.status(201).send({
+            success: true,
+            message: 'Document successfully created',
+            document: document.dataValues
+          });
+        }).catch((error) => {
+          response.status(400).send({
+            success: false,
+            message: error.message
+          });
+        });
     } else {
       response.status(400).send({
         success: false,
@@ -270,21 +268,19 @@ class DocumentController {
       where: {
         id: request.params.id
       }
-    })
-      .then((document) => {
-        if (document.OwnerId === Owner || Role === 1) {
-          document.update(request.body)
-            .then(updatedDocument => response.status(201).send(updatedDocument))
-            .catch(error => response.status(401).send(error));
-        } else {
-          response.status(401).send({
-            success: false,
-            role: Role,
-            message: 'You are not authorized to update this document'
-          });
-        }
-      })
-        .catch(error => response.status(401).send(error));
+    }).then((document) => {
+      if (document.OwnerId === Owner || Role === 1) {
+        document.update(request.body)
+          .then(updatedDocument => response.status(201).send(updatedDocument))
+          .catch(error => response.status(401).send(error));
+      } else {
+        response.status(401).send({
+          success: false,
+          role: Role,
+          message: 'You are not authorized to update this document'
+        });
+      }
+    }).catch(error => response.status(401).send(error));
   }
 
   /**
@@ -302,22 +298,20 @@ class DocumentController {
       where: {
         id: request.params.id
       }
-    })
-      .then((document) => {
-        if (document.OwnerId === Owner || Role === 1) {
-          document.destroy()
-            .then(() => response.status(201).send({
-              success: true,
-              message: 'Document has been successfully deleted'
-            }));
-        } else {
-          response.status(403).send({
-            success: false,
-            message: 'You are not authorized to delete this document'
-          });
-        }
-      })
-        .catch(error => response.status(401).send(error));
+    }).then((document) => {
+      if (document.OwnerId === Owner || Role === 1) {
+        document.destroy()
+          .then(() => response.status(201).send({
+            success: true,
+            message: 'Document has been successfully deleted'
+          }));
+      } else {
+        response.status(401).send({
+          success: false,
+          message: 'You are not authorized to delete this document'
+        });
+      }
+    }).catch(error => response.status(401).send(error));
   }
 }
 export default DocumentController;
