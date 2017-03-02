@@ -95,30 +95,29 @@ class UserController {
     Users.findById(UserId).then((user) => { RoleId = user.dataValues.roleId; });
     Users.findOne({
       where: { id: request.params.id }
-    })
-      .then((user) => {
-        if (user) {
-          if (UserId === user.dataValues.id || RoleId === 1) {
-            user.update(request.body)
-              .then(updatedUser => response.status(201).send(updatedUser));
-          } else {
-            response.status(401).send({
-              success: false,
-              message: 'Unauthorized'
-            });
-          }
+    }).then((user) => {
+      if (user) {
+        if (UserId === user.dataValues.id || RoleId === 1) {
+          user.update(request.body)
+            .then(updatedUser => response.status(201).send(updatedUser));
         } else {
-          response.status(404).send({
+          response.status(401).send({
             success: false,
-            message: 'User not found'
+            message: 'Unauthorized'
           });
         }
-      }).catch((error) => {
-        response.status(401).send({
+      } else {
+        response.status(404).send({
           success: false,
-          message: error.message
+          message: 'User not found'
         });
+      }
+    }).catch((error) => {
+      response.status(401).send({
+        success: false,
+        message: error.message
       });
+    });
   }
   /**
    * Method used to fetch all users
