@@ -28,7 +28,7 @@ class RoleController {
         .create({
           title: request.body.title
         })
-        .then(role => response.status(201).send(role));
+          .then(role => response.status(201).send(role));
     }
     response.status(404).send({
       success: false,
@@ -67,7 +67,7 @@ class RoleController {
           });
         }
       })
-      .catch(error => response.status(401).send(error));
+        .catch(error => response.status(401).send(error));
   }
 
 }

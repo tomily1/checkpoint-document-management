@@ -44,13 +44,13 @@ class UserController {
           email: request.body.email,
           roleId: request.body.RoleId
         })
-        .then(user => response.status(201).send({
-          success: true,
-          message: 'User successfully signed up',
-          RoleId: user.roleId,
-          token: Authenticate.generateToken(user)
-        }))
-        .catch(error => response.status(422).send(error));
+          .then(user => response.status(201).send({
+            success: true,
+            message: 'User successfully signed up',
+            RoleId: user.roleId,
+            token: Authenticate.generateToken(user)
+          }))
+              .catch(error => response.status(422).send(error));
     }
     response.status(400).send({
       success: false,
