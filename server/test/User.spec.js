@@ -42,7 +42,7 @@ describe('Users ==> \n', () => {
         client.post('/users')
           .send(testData.regularUser1)
           .end((error, response) => {
-            expect(response.status).to.equal(422);
+            expect(response.status).to.equal(409);
             done();
           });
       });
