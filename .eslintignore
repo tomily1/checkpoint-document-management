@@ -3,5 +3,8 @@ dist/**/*.js
 coverage/**/*.js
 server/migrations/*.js
 server/seeders/*.js
+client/
+tools/
+webpack.config.dev.js
 LICENSE
 README.md

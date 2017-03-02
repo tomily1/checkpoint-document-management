@@ -14,6 +14,5 @@ router.route('/')
 router.route('/:id')
     .get(Authenticate.authenticateUser, DocumentController.fetchDocuments)
     .put(Authenticate.authenticateUser, DocumentController.updateDocument)
-    .delete(Authenticate.authenticateUser,
-            DocumentController.deleteDocument);
+    .delete(Authenticate.authenticateUser, DocumentController.deleteDocument);
 export default router;
