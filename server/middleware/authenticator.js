@@ -45,7 +45,6 @@ class Authenticator {
    */
   static generateToken(user) {
     return jwt.sign({
-      // RoleId: user.roleId,
       UserId: user.id
     }, SECRET_KEY, { expiresIn: 86400 });
   }

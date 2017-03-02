@@ -48,7 +48,11 @@ class UserController {
           message: 'User successfully signed up',
           RoleId: user.roleId,
           token: Authenticate.generateToken(user)
-        })).catch(error => response.status(422).send(error));
+        })).catch(error => response.status(409).send({
+          success: false,
+          message: `${error.message}`,
+          error: error.errors[0].message
+        }));
     }
     response.status(400).send({
       success: false,
