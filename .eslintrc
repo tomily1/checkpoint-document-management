@@ -6,6 +6,16 @@
     "es6": true,
     "mocha": true
   },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "modules": true,
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [
+      "react"
+  ],
   "globals": {
     "amd": true,
     "commonjs": true

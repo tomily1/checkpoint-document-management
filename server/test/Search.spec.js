@@ -1,4 +1,4 @@
- /* eslint import/no-extraneous-dependencies: 0 */
+/* eslint import/no-extraneous-dependencies: 0 */
 /* eslint import/no-unresolved: 0 */
 /* eslint no-unused-expressions: 0 */
 
@@ -16,71 +16,76 @@ describe('Search', () => {
   const adminUser = testData.adminUserSearch;
   before((done) => {
     client.post('/users')
-    .send(adminUser)
-    .end((error, response) => {
-      adminUserToken = response.body.token;
-      client.post('/documents')
-      .set({ 'x-access-token': adminUserToken })
-      .send(testDocument)
-      .end(() => {
-        done();
+      .send(adminUser)
+      .end((error, response) => {
+        adminUserToken = response.body.token;
+        client.post('/documents')
+          .set({ 'x-access-token': adminUserToken })
+          .send(testDocument)
+          .end(() => {
+            done();
+          });
       });
-    });
   });
 
   it('should return documents limited by a specified number', (done) => {
     const searchLimit = 3;
-    client.get(`/documents/?limit=${searchLimit}`)
-    .set({ 'x-access-token': adminUserToken })
-    .end((error, response) => {
-      expect(response.status).to.equal(200);
-      expect(response.body.results.length).to.equal(searchLimit);
-      done();
-    });
+    client.post('/documents')
+      .set({ 'x-access-token': adminUserToken })
+      .send(testData.documentPublic1)
+      .end(() => {
+        client.get(`/documents/?limit=${searchLimit}`)
+          .set({ 'x-access-token': adminUserToken })
+          .end((error, response) => {
+            expect(response.status).to.equal(200);
+            expect(response.body.results.length).to.equal(searchLimit);
+            done();
+          });
+      });
   });
 
   it('should return documents ordered by published date in descending order',
-  (done) => {
-    client.get('/documents/')
-    .set({ 'x-access-token': adminUserToken })
-    .end((error, response) => {
-      expect(response.status).to.equal(200);
-      let oldestDate = Date.now();
-      response.body.results.forEach((document) => {
-        const createdDate = Date.parse(document.createdAt);
-        expect(createdDate).to.be.lte(oldestDate);
-        oldestDate = createdDate;
-      });
-      done();
+    (done) => {
+      client.get('/documents/')
+        .set({ 'x-access-token': adminUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(200);
+          let oldestDate = Date.now();
+          response.body.results.forEach((document) => {
+            const createdDate = Date.parse(document.createdAt);
+            expect(createdDate).to.be.lte(oldestDate);
+            oldestDate = createdDate;
+          });
+          done();
+        });
     });
-  });
 
   it('should return only documents that match a specific query', (done) => {
-    const searchText = testDocument.title.split(/\s/)[0];
+    const searchText = testData.documentPublic1.title;
     client.get(`/documents/?search=${searchText}`)
-    .set({ 'x-access-token': adminUserToken })
-    .end((error, response) => {
-      expect(response.status).to.equal(200);
-      response.body.results.forEach((document) => {
-        expect(document.title).to.contain(searchText) ||
-        expect(document.content).to.contain(searchText);
+      .set({ 'x-access-token': adminUserToken })
+      .end((error, response) => {
+        expect(response.status).to.equal(200);
+        response.body.results.forEach((document) => {
+          expect(document.title).to.contain(searchText) ||
+            expect(document.content).to.contain(searchText);
+        });
+        done();
       });
-      done();
-    });
   });
   it('should return documents limited by a specified number with result containing the search terms', (done) => {
     const searchLimit = 3;
     const query = 'a';
     client.get(`/documents/?search=${query}&limit=${searchLimit}`)
-    .set({ 'x-access-token': adminUserToken })
-    .end((error, response) => {
-      expect(response.status).to.equal(200);
-      response.body.results.forEach((document) => {
-        expect(document.title).to.contain(query) || expect(document.content).to.contain(query);
+      .set({ 'x-access-token': adminUserToken })
+      .end((error, response) => {
+        expect(response.status).to.equal(200);
+        response.body.results.forEach((document) => {
+          expect(document.title).to.contain(query) || expect(document.content).to.contain(query);
+        });
+        expect(response.body.results.length).to.equal(searchLimit);
+        done();
       });
-      expect(response.body.results.length).to.equal(searchLimit);
-      done();
-    });
   });
   it('should return documents limited by a specified number with result containing the search terms', (done) => {
     const searchLimit = 3;

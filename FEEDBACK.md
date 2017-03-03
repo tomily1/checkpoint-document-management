@@ -16,3 +16,8 @@
 1. Line 27, include user id
 2. Line 44, improper status code.
 3. line 47, 56, 66 improper indentation
+
+#### Controllers
+1. Include how to send payload to api requests
+2. Search test should be sorted
+3. Production build should not run on babel-node

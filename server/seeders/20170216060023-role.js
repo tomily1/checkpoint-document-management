@@ -12,7 +12,7 @@ module.exports = {
       isBetaMember: false
     },
     {
-      title: 'title',
+      title: 'regular',
       isBetaMember: false
     }
     ], {});
