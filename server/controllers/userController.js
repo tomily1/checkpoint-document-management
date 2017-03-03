@@ -161,7 +161,6 @@ class UserController {
       .then((user) => {
         if (user && user.validPassword(request.body.password)) {
           const token = jwt.sign({
-            RoleId: user.roleId,
             UserId: user.id
           }, SECRET_KEY, { expiresIn: 86400 });
           response.status(201).send({ token, expiresIn: 86400 });
