@@ -16,7 +16,7 @@ router.route('/admin')
   Authenticator.authenticateAdmin, UserController.createAdmin);
 
 router.route('/:id')
-  .get(UserController.fetchUser)
+  .get(Authenticator.authenticateUser, Authenticator.authenticateAdmin, UserController.fetchUser)
   .delete(Authenticator.authenticateUser,
   Authenticator.authenticateAdmin, UserController.deleteUser)
   .put(Authenticator.authenticateUser, UserController.updateUser);

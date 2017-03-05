@@ -35,6 +35,7 @@ describe('Users ==> \n', () => {
       });
     it('should be able to search for another user in the database', (done) => {
       client.get('/users/1')
+        .set({ 'x-access-token': superAdminToken })
         .end((error, response) => {
           expect(response.status).equal(200);
           expect(response.body).to.have.property('id');
@@ -107,7 +108,7 @@ describe('Users ==> \n', () => {
           lastname: 'Israel',
           password: 'Israel123'
         })
-        .set({ 'x-access-token': adminToken2 })
+        .set({ 'x-access-token': superAdminToken })
         .end((error, response) => {
           expect(response.status).to.equal(201);
           done();
@@ -155,7 +156,7 @@ describe('Users ==> \n', () => {
     });
     it('should return 404 response status for a user that is not present in the database', (done) => {
       client.get('/users/300')
-        .set({ 'x-access-token': adminToken })
+        .set({ 'x-access-token': superAdminToken })
         .end((error, response) => {
           expect(response.status).equal(404);
           done();

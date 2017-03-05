@@ -179,7 +179,12 @@ class UserController {
     Users.findOne({ where: { id: request.params.id } })
       .then((user) => {
         if (user) {
-          response.status(200).send(user);
+          response.status(200).send({
+            firstname: user.dataValues.firstName,
+            lastname: user.dataValues.lastName,
+            username: user.dataValues.username,
+            id: user.dataValues.id
+          });
         } else {
           response.status(404).send({
             success: false,
