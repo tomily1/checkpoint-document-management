@@ -13,10 +13,12 @@ const client = supertest.agent(app);
 let adminUserToken;
 const testDocument = testData.documentPublic1;
 describe('Search', () => {
-  const adminUser = testData.adminUserSearch;
   before((done) => {
-    client.post('/users')
-      .send(adminUser)
+    client.post('/users/login')
+      .send({
+        email: 'test@test.com',
+        password: 'test'
+      })
       .end((error, response) => {
         adminUserToken = response.body.token;
         client.post('/documents')
@@ -90,8 +92,11 @@ describe('Search', () => {
   it('should return documents limited by a specified number with result containing the search terms', (done) => {
     const searchLimit = 3;
     const query = 's' || 'i';
-    client.post('/users')
-      .send(testData.regularUser5)
+    client.post('/users/login')
+      .send({
+        email: 'tests@test.com',
+        password: 'tests'
+      })
       .end((error1, response1) => {
         const regularToken5 = response1.body.token;
         client.get(`/documents/?search=${query}&limit=${searchLimit}`)

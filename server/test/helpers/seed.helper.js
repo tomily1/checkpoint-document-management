@@ -17,6 +17,7 @@ class Seeder {
     db.sequelize.sync({ force: true })
       .then(() => {
         Seeder.seedRoleTable();
+        Seeder.seedUserTable();
       })
       .catch((err) => {
         logger.error(err);
@@ -35,6 +36,28 @@ class Seeder {
     }
     ];
     return db.role.bulkCreate(roles);
+  }
+  /**
+   * Populates database with default admin user
+   * @returns{Object} - A promise Object
+   */
+  static seedUserTable() {
+    const user = [{
+      username: 'test',
+      firstName: 'test',
+      lastName: 'test',
+      email: 'test@test.com',
+      password: Seeder.hashPassword('test'),
+      roleId: 1
+    }, {
+      username: 'tests',
+      firstName: 'test',
+      lastName: 'test',
+      email: 'tests@test.com',
+      password: Seeder.hashPassword('tests'),
+      roleId: 2
+    }];
+    return db.users.bulkCreate(user);
   }
   /**
   * Generate a hash from plain password string

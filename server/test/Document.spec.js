@@ -1,4 +1,4 @@
- /* eslint import/no-extraneous-dependencies: 0 */
+/* eslint import/no-extraneous-dependencies: 0 */
 /* eslint import/no-unresolved: 0 */
 import supertest from 'supertest';
 import chai from 'chai';
@@ -8,7 +8,7 @@ import testData from './helpers/spec.helper';
 const expect = chai.expect;
 const client = supertest.agent(app);
 
-const adminUser = testData.adminUserForDocumentTest;
+const adminUser = { email: 'test@test.com', password: 'test' };
 const regularUser = testData.regularUserForDocumentTest;
 const regularUser2 = testData.regularUserForDocumentTest2;
 
@@ -16,7 +16,7 @@ describe('Documents:', () => {
   // lets create neccessary users for these tests and get their details
   let regularUserToken, adminUserToken, regularUser2Token;
   before((done) => {
-    client.post('/users')
+    client.post('/users/login')
       .send(adminUser)
       .end((error, response) => {
         adminUserToken = response.body.token;
@@ -232,7 +232,7 @@ describe('Documents:', () => {
         .set({ 'x-access-token': regularUserToken })
         .send(testData.documentPublic1)
         .end(() => {
-          client.get('/users/2/documents')
+          client.get('/users/3/documents')
             .set({ 'x-access-token': adminUserToken })
             .end((error1, response1) => {
               expect(response1.status).to.equal(200);
@@ -241,7 +241,7 @@ describe('Documents:', () => {
         });
     });
     it('Regular Users should be able to access public documents only', (done) => {
-      client.get('/users/2/documents')
+      client.get('/users/3/documents')
         .set({ 'x-access-token': regularUser2Token })
         .end((error, response) => {
           expect(response.status).to.equal(200);

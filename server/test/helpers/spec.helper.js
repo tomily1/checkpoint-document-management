@@ -48,8 +48,7 @@ const testData = {
     firstname: faker.name.firstName(),
     lastname: faker.name.lastName(),
     email: faker.internet.email(),
-    password: faker.internet.password(),
-    RoleId: 1
+    password: faker.internet.password()
   },
   adminUser5: {
     username: faker.internet.userName(),
