@@ -76,7 +76,7 @@ describe('Search', () => {
       });
   });
   it('should return documents limited by a specified number with result containing the search terms', (done) => {
-    const searchLimit = 3;
+    const searchLimit = 2;
     const query = 'a';
     client.get(`/documents/?search=${query}&limit=${searchLimit}`)
       .set({ 'x-access-token': adminUserToken })
@@ -90,7 +90,7 @@ describe('Search', () => {
       });
   });
   it('should return documents limited by a specified number with result containing the search terms', (done) => {
-    const searchLimit = 3;
+    const searchLimit = 2;
     const query = 's' || 'i';
     client.post('/users/login')
       .send({
