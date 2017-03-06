@@ -23,8 +23,7 @@ class UserController {
       request.body.firstname &&
       request.body.lastname &&
       request.body.password &&
-      request.body.email &&
-      request.body.RoleId
+      request.body.email
     );
   }
   /**
@@ -42,7 +41,7 @@ class UserController {
           lastName: request.body.lastname,
           password: request.body.password,
           email: request.body.email,
-          roleId: request.body.RoleId
+          roleId: 2
         }).then(user => response.status(201).send({
           success: true,
           message: 'User successfully signed up',
@@ -58,6 +57,45 @@ class UserController {
       success: false,
       message: 'You did not input your field properly'
     });
+  }
+  /**
+   * Method used to create admin user, only accessible to admin user(s).
+   * @param{Object} request - Server Request
+   * @param{Object} response - Server Response
+   * @returns{Void} return Void
+   */
+  static createAdmin(request, response) {
+    const UserId = request.decoded.UserId;
+    let RoleId;
+    Users.findById(UserId).then((user) => { RoleId = user.dataValues.roleId; })
+      .then(() => {
+        if (RoleId === 1) {
+          return Users
+            .create({
+              username: request.body.username,
+              firstName: request.body.firstname,
+              lastName: request.body.lastname,
+              password: request.body.password,
+              email: request.body.email,
+              roleId: 1
+            }).then((adminUser) => {
+              response.status(201).send({
+                success: false,
+                message: 'Admin user successfully created',
+                RoleId: adminUser.roleId,
+                token: Authenticate.generateToken(adminUser)
+              });
+            }).catch(error => response.status(409).send({
+              success: false,
+              message: `${error.message}`,
+              error: error.errors[0].message
+            }));
+        }
+        response.status(401).send({
+          success: false,
+          message: 'You are not authorized'
+        });
+      });
   }
   /**
    * Method used to delete user
@@ -141,7 +179,12 @@ class UserController {
     Users.findOne({ where: { id: request.params.id } })
       .then((user) => {
         if (user) {
-          response.status(200).send(user);
+          response.status(200).send({
+            firstname: user.dataValues.firstName,
+            lastname: user.dataValues.lastName,
+            username: user.dataValues.username,
+            id: user.dataValues.id
+          });
         } else {
           response.status(404).send({
             success: false,

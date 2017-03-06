@@ -10,17 +10,16 @@ const client = supertest.agent(app);
 
 describe('Admin Roles:', () => {
   let adminToken;
+  const userInput = {
+    email: 'test@test.com',
+    password: 'test'
+  };
   before((done) => {
-    // runs before all tests in this block
-    client.post('/users')
-      .send(testData.adminUserRole)
-      .end(() => {
-        client.post('/users/login')
-          .send(testData.adminUserRole)
-          .end((error1, response1) => {
-            adminToken = response1.body.token;
-            done();
-          });
+    client.post('/users/login')
+      .send(userInput)
+      .end((error1, response1) => {
+        adminToken = response1.body.token;
+        done();
       });
   });
   it('should only allow user with a valid token to create Roles', (done) => {

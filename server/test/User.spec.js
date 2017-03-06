@@ -9,7 +9,19 @@ const expect = chai.expect;
 const client = supertest.agent(app);
 
 const regularUser = testData.regularUser1;
+let superAdminToken;
 describe('Users ==> \n', () => {
+  before((done) => {
+    client.post('/users/login')
+      .send({
+        email: 'test@test.com',
+        password: 'test'
+      })
+      .end((error, response) => {
+        superAdminToken = response.body.token;
+        done();
+      });
+  });
   describe('Users', () => {
     let regularUserToken, adminToken2;
     it('should return a status code of 201 when a regular user has beesn successfully created',
@@ -23,6 +35,7 @@ describe('Users ==> \n', () => {
       });
     it('should be able to search for another user in the database', (done) => {
       client.get('/users/1')
+        .set({ 'x-access-token': superAdminToken })
         .end((error, response) => {
           expect(response.status).equal(200);
           expect(response.body).to.have.property('id');
@@ -74,7 +87,8 @@ describe('Users ==> \n', () => {
         });
     });
     it('should not update details for non existent user', (done) => {
-      client.post('/users')
+      client.post('/users/admin')
+        .set({ 'x-access-token': superAdminToken })
         .send(testData.adminUser4)
         .end((error, response) => {
           adminToken2 = response.body.token;
@@ -94,7 +108,7 @@ describe('Users ==> \n', () => {
           lastname: 'Israel',
           password: 'Israel123'
         })
-        .set({ 'x-access-token': adminToken2 })
+        .set({ 'x-access-token': superAdminToken })
         .end((error, response) => {
           expect(response.status).to.equal(201);
           done();
@@ -116,7 +130,8 @@ describe('Users ==> \n', () => {
       });
     it('Role Id for admin user should be 1',
       (done) => {
-        client.post('/users')
+        client.post('/users/admin')
+          .set({ 'x-access-token': superAdminToken })
           .send(testData.adminUser2)
           .end((error, response) => {
             expect(response.body.RoleId).to.equal(1);
@@ -124,8 +139,8 @@ describe('Users ==> \n', () => {
           });
       });
     it('Should be able to delete users', (done) => {
-      client.delete('/users/1')
-        .set({ 'x-access-token': adminToken })
+      client.delete('/users/4')
+        .set({ 'x-access-token': superAdminToken })
         .end((error, response) => {
           expect(response.status).to.equal(200);
           done();
@@ -133,7 +148,7 @@ describe('Users ==> \n', () => {
     });
     it('should return a status code of 404 for invalid delete parameter or if user not found', (done) => {
       client.delete('/users/100')
-        .set({ 'x-access-token': adminToken })
+        .set({ 'x-access-token': superAdminToken })
         .end((error, response) => {
           expect(response.status).to.equal(404);
           done();
@@ -141,9 +156,18 @@ describe('Users ==> \n', () => {
     });
     it('should return 404 response status for a user that is not present in the database', (done) => {
       client.get('/users/300')
-        .set({ 'x-access-token': adminToken })
+        .set({ 'x-access-token': superAdminToken })
         .end((error, response) => {
           expect(response.status).equal(404);
+          done();
+        });
+    });
+    it('should be able to fetch all the users in the database', (done) => {
+      client.get('/users')
+        .set({ 'x-access-token': superAdminToken })
+        .send(testData.adminUser)
+        .end((error, response) => {
+          expect(response.status).to.equal(201);
           done();
         });
     });
@@ -151,7 +175,6 @@ describe('Users ==> \n', () => {
 
   describe('login', () => {
     const adminUser = testData.adminUser;
-    let adminUserTokens;
     it('Should allow login for only CORRECT details of an Admin user', (done) => {
       client.post('/users/login')
         .send({
@@ -159,17 +182,7 @@ describe('Users ==> \n', () => {
           password: adminUser.password
         })
         .end((error, response) => {
-          adminUserTokens = response.body.token;
           expect(response.body).to.have.property('token');
-          done();
-        });
-    });
-    it('should be able to fetch all the users in the database', (done) => {
-      client.get('/users')
-        .set({ 'x-access-token': adminUserTokens })
-        .send(testData.adminUser)
-        .end((error, response) => {
-          expect(response.status).to.equal(201);
           done();
         });
     });

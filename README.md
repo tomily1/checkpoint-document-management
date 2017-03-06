@@ -44,24 +44,24 @@ Run the App on `POSTMAN`.
 #### *API Endpoints*
 | **HTTP Verb** | **Endpoint** | **Functionality**|
 |------|-------|-----------------|
-| **POST** | /users/login | Logs a user in and returns a token which should be subsequently used to access authenticated endpoints |
+| **POST** | /users/login | Logs a user in and returns a token which should be subsequently used to access authenticated endpoints. request parameters include `email` and `password`|
 | **POST** | /users/logout | Logs a user out |
-| **POST** | /users/ | Creates a new user. Required attributes are `firstName`, `lastName`, `email`, `password`. If a `role` is not specified, a defualt role of `regular` created |
+| **POST** | /users/ | Creates a new user. Required attributes are `firstName`, `lastName`, `email`, `password`. If a `role` is not specified, a defualt role of `regular` is created |
 | **GET** | /users/ | Fetch all registered users (`admin` privilege required) |
-| **GET** | /users/:id | Fetch a user by specific id (`admin` privilege required) |
-| **PUT** | /users/:id | Update a specific user (by id) attributes|
-| **DELETE** | /users/:id |Delete a specific user by id. (`admin` privilege required |
-| **POST** | /documents/ | Creates a new document instance. Required attributes are `title` and `content`. If an `access` is NOT specified, the document is marked  _public_ |
+| **GET** | /users/:id | Fetch a user by specific id (`admin` privilege required). parameter: `id` of the particular user as url query |
+| **PUT** | /users/:id | Update a specific user (by id) attributes.  parameter: `id` of the particular user as url query|
+| **DELETE** | /users/:id |Delete a specific user by id. (`admin` privilege required).  parameter: `id` of the particular user as url query |
+| **POST** | /documents/ | Creates a new document instance. Required attributes are `title`, `content` and `access`. If an `access` is NOT specified, the document is marked  _public_ by default |
 | **GET** | /documents/ | Fetch all documents (returns all documents based on each document access right and the requesters role) |
-| **GET** | /documents/:id | Fectch a specific document by it's id |
-| **PUT** | /documents/:id | Update specific document attributes by it's id |
-| **DELETE** | /documents/:id | Delete a specific document by it's id |
-| **GET** | /users/:id/documents | Find all documents belonging to the specified user |
+| **GET** | /documents/:id | Fectch a specific document by it's id. parameter: `id` of the particular document as url query|
+| **PUT** | /documents/:id | Update specific document attributes by it's id. parameter: `id` of the particular document as url query |
+| **DELETE** | /documents/:id | Delete a specific document by it's id. parameter: `id` of the particular document as url query |
+| **GET** | /users/:id/documents | Find all documents belonging to the specified user.  parameter: `id` of the particular user as url query to get the correponding documents belonging to that user |
 | **POST** | /roles/ | Create a new role (`admin` privilege required) |
 | **GET** | /roles/ | Fetches all roles (`admin privilege required`) |
-| **GET** | /roles/:id | Find a role by id (`admin privilege required`) |
-| **PUT** | /roles/:id | Update role attributes (`admin privilege required`) |
-| **DELETE** | /delete/:id | Delete role (`admin privilege required`) |
+| **GET** | /roles/:id | Find a role by id (`admin privilege required`).  parameter: `id` of the particular role as url query |
+| **PUT** | /roles/:id | Update role attributes (`admin privilege required`).  parameter: `id` of the particular role as url query |
+| **DELETE** | /delete/:id | Delete role (`admin privilege required`).  parameter: `id` of the particular role as url query |
 
 #### *Contributing*
 1. Fork this repository to your GitHub account
