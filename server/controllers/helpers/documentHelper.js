@@ -7,31 +7,6 @@ const Documents = db.documents;
 class DocumentHelper {
 
   /**
-   * Checks the documents belonging to the user in the database
-   * @param {String} title title of the document
-   * @param {String} content content of the document
-   * @param {Number} UserId the UserId as the OwnerId of the document
-   * @return {Boolean} true or false
-   */
-  static checkUserDocuments(rtitle, rcontent, id) {
-    let docs = [];
-    Documents.findAll({
-      where: {
-        OwnerId: id,
-        $and: {
-          $or: [
-            { title: rtitle },
-            { content: rcontent }
-          ]
-        }
-      }
-    }).then((result) => {
-      docs = result;
-    }).then(() => {
-      return docs;
-    });
-  }
-  /**
    * Sanitizes search queries
    * @param {String} query to be sanitized.
    * @return {String} sanitized strings.
