@@ -238,6 +238,9 @@ const testData = {
   },
   newRole3: {
     title: 'professional'
+  },
+  invalidToken: {
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjYsImlhdCI6MTQ4ODkyNzU1OSwiZXhwIjoxNDg5MDEzOTU5fQ.knnZeLlKhXkGX3AYeT3lUgJQlMqOVueDQC6BGkSgbY4'
   }
 };
 
