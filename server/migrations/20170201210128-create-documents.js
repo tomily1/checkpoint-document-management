@@ -11,8 +11,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       content: {
-        type: Sequelize.TEXT,
-        unique: true
+        type: Sequelize.TEXT
       },
       access: {
         defaultValue: 'public',

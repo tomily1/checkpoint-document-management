@@ -31,24 +31,43 @@ class DocumentController {
    */
   static createDocument(request, response) {
     if (DocumentController.postRequest(request)) {
-      Documents
-        .create({
-          title: request.body.title,
-          content: request.body.content,
-          access: request.body.access ? request.body.access : 'public',
+      Documents.findAll({
+        where: {
           OwnerId: request.decoded.UserId,
-        }).then((document) => {
-          response.status(201).send({
-            success: true,
-            message: 'Document successfully created',
-            document: document.dataValues
-          });
-        }).catch((error) => {
-          response.status(400).send({
+          $and: {
+            $or: [
+              { title: request.body.title },
+              { content: request.body.content }
+            ]
+          }
+        }
+      }).then((result) => {
+        if (result.length > 0) {
+          response.status(409).send({
             success: false,
-            message: error.message
+            message: 'You cannot create document, title and content of documents must be unique'
           });
-        });
+        } else {
+          Documents
+            .create({
+              title: request.body.title,
+              content: request.body.content,
+              access: request.body.access ? request.body.access : 'public',
+              OwnerId: request.decoded.UserId,
+            }).then((document) => {
+              response.status(201).send({
+                success: true,
+                message: 'Document successfully created',
+                document: document.dataValues
+              });
+            }).catch((error) => {
+              response.status(400).send({
+                success: false,
+                message: error.message
+              });
+            });
+        }
+      });
     } else {
       response.status(400).send({
         success: false,
