@@ -24,6 +24,24 @@ describe('Users ==> \n', () => {
   });
   describe('Users', () => {
     let regularUserToken, adminToken2;
+    it('with invalid token should not be authenticated ',
+      (done) => {
+        client.get('/users')
+          .set({ 'x-access-token': testData.invalidToken.token })
+          .end((error, response) => {
+            expect(response.status).to.equal(401);
+            done();
+          });
+      });
+    it('Should not be authenticated without a token ',
+      (done) => {
+        client.get('/users')
+          .end((error, response) => {
+            expect(response.status).to.equal(401);
+            expect(response.body.status).to.equal('Failed');
+            done();
+          });
+      });
     it('should return a status code of 201 when a regular user has beesn successfully created',
       (done) => {
         client.post('/users')
@@ -207,10 +225,10 @@ describe('Users ==> \n', () => {
   describe('Catch all route', () => {
     it('For invalid GET URl, it should redirect user back to the homepage', (done) => {
       client.get('/asjhbcnsincewe')
-      .end((error, response) => {
-        expect(response.status).to.equal(200);
-        done();
-      });
+        .end((error, response) => {
+          expect(response.status).to.equal(200);
+          done();
+        });
     });
   });
 });

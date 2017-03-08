@@ -240,12 +240,28 @@ describe('Documents:', () => {
             });
         });
     });
+    it('Admin should receive a 404 status response if the user has no documents', (done) => {
+      client.get('/users/5/documents')
+        .set({ 'x-access-token': adminUserToken })
+        .end((error, response) => {
+          expect(response.status).to.equal(404);
+          done();
+        });
+    });
     it('Regular Users should be able to access public documents only', (done) => {
       client.get('/users/3/documents')
         .set({ 'x-access-token': regularUser2Token })
         .end((error, response) => {
           expect(response.status).to.equal(200);
           expect(response.body[0].access).to.equal('public');
+          done();
+        });
+    });
+    it('Regular Users should be able to access public documents only', (done) => {
+      client.get('/users/5/documents')
+        .set({ 'x-access-token': regularUser2Token })
+        .end((error, response) => {
+          expect(response.status).to.equal(404);
           done();
         });
     });
