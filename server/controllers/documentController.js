@@ -158,10 +158,6 @@ class DocumentController {
         }
         Documents.findAndCountAll(queryBuilder)
           .then((results) => {
-            // results.rows.forEach(data => {
-            //   console.log(data.dataValues.user.roleId);
-            //   console.log(data.dataValues.access);
-            // });
             if (results.count < 1) {
               response.status(404).send({
                 success: false,
