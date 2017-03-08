@@ -63,6 +63,451 @@ Run the App on `POSTMAN`.
 | **PUT** | /roles/:id | Update role attributes (`admin privilege required`).  parameter: `id` of the particular role as url query |
 | **DELETE** | /delete/:id | Delete role (`admin privilege required`).  parameter: `id` of the particular role as url query |
 
+## Sample Requests and Responses
+### Roles
+Endpoints for role API
+- [Get Roles](#get-roles)
+- [Create Role](#create-roles)
+- [Delete Role](#delete-role)
+
+#### Get Roles
+#### Request
+- Endpoint: GET: `/roles`
+- Requires: Authentication and Admin Access Level
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+[
+  {
+    "id": 1,
+    "title": "admin",
+    "createdAt": "2017-03-03T13:28:22.003Z",
+    "updatedAt": "2017-03-03T13:28:22.003Z"
+  }
+  {
+    "id": 3,
+    "title": "regular",
+    "createdAt": "2017-03-03T13:28:22.003Z",
+    "updatedAt": "2017-03-03T13:28:22.003Z"
+  }
+]
+```
+
+### Create Role
+#### Request
+- Endpoint: POST: `/roles`
+- Requires: Authentication and Admin Access Level
+- Body `(application/json)`
+```json
+{ "title": "supervisor" }
+```
+#### Response
+- Status: `201: Created`
+- Body `(application/json)`
+```json
+  "role": {
+    "id": 3,
+    "title": "supervisor",
+    "updatedAt": "2017-03-07T15:57:29.019Z",
+    "createdAt": "2017-03-07T15:57:29.019Z"
+  }
+```
+
+### Delete Role
+
+#### Request
+- Endpoint: DELETE: `/roles/:id`
+- Requires: Authentication and Admin Access Level
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+{
+  "success": true,
+  "message": "Role Successfully deleted from database"
+}
+```
+
+
+### Users
+Endpoint for Users API.
+  - [Create user](#create-user)
+  - [Get all users](#get-users)
+  - [Get single user](#get-single-user)
+  - [Edit user](#edit-user)
+  - [Delete user](#delete-user)
+  - [Login](#login)
+  - [Logout](#logout)
+
+### Create User
+
+#### Request
+- Endpoint: POST: `/users`
+- Body `(application/json)`
+```json
+{
+  "username": "uniqueuser",
+  "firstname": "First Name",
+  "lastname": "Last Name",
+  "email": "uniqueuser@unique.com",
+  "password": "password"
+}
+```
+
+#### Response
+- Status: `201: Created`
+- Body `(application/json)`
+```json
+{
+  "success": true,
+  "message": "User successfully signed up",
+  "RoleId": 2,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCsdfdfdI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzdXBlcmFkbWluIiwiZmlyc3RuYW1lIjoiRGFyaXVzIiwibGFzdG5hbWUiOiJKYXN0IiwiZW1haWwiOiJvcmViYW40dUB5YWhvby5jby51ayIsImRlcGFydG1lbnRJZCI6MSwiaWF0IjoxNDg4OTA4ODczLCJleHAiOjE0ODg5MTYwNzN9.ou0fzsufXyPNojT1shLa4N2zEuV9rvtPKcrs_amlYrQ",
+  "expiresIn": "86400"
+}
+```
+
+### Get Users
+
+#### Request
+- Endpoint: GET: `/users`
+- Requires: Authentication and Admin access.
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+  [
+    {
+      "id": 1,
+      "username": "super",
+      "firstname": "Sydnie",
+      "lastname": "Mitchell"
+    },
+    {
+      "id": 2,
+      "username": "cook",
+      "firstname": "Louisa",
+      "lastname": "Murazik"
+    }
+  ]
+```
+
+### Get Single User
+
+#### Request
+- Endpoint: GET: `/users/:id`
+- Requires: Authentication
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+{
+  "id": 1,
+  "username": "super",
+  "firstname": "Sydnie",
+  "lastname": "Mitchell"
+}
+```
+
+### Edit User
+
+#### Request
+- Endpoint: PUT: `/users/:id`
+- Requires: Authentication and Admin/Owner Access Level
+- Body `(application/json)`
+```json
+{
+  "username": "editeduser",
+  "firstname": "Edited User",
+  "lastname": "Edited User",
+  "email": "editeduser@unique.com",
+  "password": "password"
+}
+```
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+{
+    "id": 9,
+    "username": "edited",
+    "firstname": "editeduser",
+    "lastname": "user",
+    "email": "editeduser@admin.com",
+    "createdAt": "2017-03-07T16:56:09.880Z",
+    "updatedAt": "2017-03-07T17:30:07.385Z"
+    }
+```
+
+### Delete User
+
+#### Request
+- Endpoint: DELETE: `/user/:id`
+- Requires: Authentication and Super Admin Access Level
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+{
+  "success": true,
+  "message": "User Successfully deleted from database"
+}
+```
+
+### Login
+
+#### Request
+- Endpoint: POST: `users/login`
+- Requires: Authentication of User or Admin to gain token for access.
+- Body `(application/json)`
+```json
+{
+  "email": "test@test.com",
+  "password": "test"
+}
+```
+
+#### Response
+- Status `200: OK`
+- Body `(application/json)`
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCsdfdfdI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzdXBlcmFkbWluIiwiZmlyc3RuYW1lIjoiRGFyaXVzIiwibGFzdG5hbWUiOiJKYXN0IiwiZW1haWwiOiJvcmViYW40dUB5YWhvby5jby51ayIsImRlcGFydG1lbnRJZCI6MSwiaWF0IjoxNDg4OTA4ODczLCJleHAiOjE0ODg5MTYwNzN9.ou0fzsufXyPNojT1shLa4N2zEuV9rvtPKcrs_amlYrQ",
+  "expiresIn": "86400"
+}
+```
+
+### Logout
+
+#### Request
+- Endpoint: POST: `users/logout`
+- Requires: Authentication of User or Admin to delete token from localStorage.
+- Body `(application/json)`
+
+#### Response
+- Status `200: OK`
+- Body `(application/json)`
+```json
+{
+  "success": true,
+ "message": "User logged out successfully"
+}
+```
+
+## Documents
+Endpoint for Documents.
+  - [Create document](#create-document)
+  - [Get all documents](#get-all-documents)
+  - [Get single document](#get-single-document)
+  - [Edit document](#edit-document)
+  - [Delete document](#delete-document)
+  - [Search Documents](#search-documents)
+  - [Find User Documents](#user-documents)
+
+### Create Document
+
+#### Request
+- Endpoint: POST: `/documents`
+- Body `(application/json)`
+```json
+{
+  "title": "readmi",
+  "content": "this is a demo dare to ask for the impossible.",
+  "access": "public",
+  "OwnerId": 2
+}
+```
+
+#### Response
+- Status: `201: Created`
+- Body `(application/json)`
+```json
+{
+  "success": true,
+  "message": "Document successfully created",
+  "document": {
+    "id": 8,
+    "title": "readmi",
+    "content": "this is a demo dare to ask for the impossible.",
+    "access": "public",
+    "OwnerId": 2,
+    "updatedAt": "2017-03-07T18:20:20.929Z",
+    "createdAt": "2017-03-07T18:20:20.929Z"
+  }
+}
+```
+
+### Get Documents
+
+#### Request
+- Endpoint: GET: `/documents`
+- Requires: Authentication
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+{
+  "success": true,
+  "results": [
+    {
+      "id": 1,
+      "title": "Integrated regional info-mediaries",
+      "content": "Voluptas et nostrum assumenda ea velit facere molestiae reprehenderit atque. Optio laboriosam harum. Aut ut nemo tenetur. Architecto praesentium aut at. Corrupti totam quo.",
+      "OwnerId": 3,
+      "access": "public",
+      "createdAt": "2017-03-06T12:02:27.902Z"
+    },
+    {
+      "id": 2,
+      "title": "we worship forever",
+      "content": "Reiciendis voluptate error voluptatem possimus dolores provident neque aut nemo. Ab in quia ut quos ipsum veritatis consequatur alias. Quae aut facilis.",
+      "OwnerId": 5,
+      "access": "public",
+      "createdAt": "2017-03-06T12:02:27.902Z"
+    }
+  ]
+}
+```
+
+### Get Single Document
+
+#### Request
+- Endpoint: GET: `/documents/:id`
+- Requires: Authentication, Admin or user Access for public documents, Admin/Owner access for private documents, admin/role access for role documents
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+{
+  "success": true,
+  "message": "Document found",
+  "document": {
+    "id": 6,
+    "title": "Enhanced client-driven focus group",
+    "content": "Placeat aspernatur dolores corporis. Ipsum similique maiores quisquam ratione vel.",
+    "OwnerId": 3,
+    "access": "public",
+    "createdAt": "2017-03-06T12:02:27.902Z",
+    "updatedAt": "2017-03-06T12:02:27.902Z"
+  }
+}
+```
+
+### Edit Document
+
+#### Request
+- Endpoint: PUT: `/documents/:id`
+- Requires: Authentication and Super Admin/Owner Access Level
+- Body `(application/json)`
+```json
+{
+  "title": "readmi",
+  "content": "this is a demo dareasdfasdfsfaf to ask for the impossible.",
+  "access": "private"
+}
+```
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+{
+  "id": 6,
+  "title": "readmi",
+  "content": "this is a demo dareasdfasdfsfaf to ask for the impossible.",
+  "access": "private",
+  "OwnerId": 3,
+  "createdAt": "2017-03-06T12:02:27.902Z",
+  "updatedAt": "2017-03-07T18:40:19.108Z"
+}
+```
+
+### Delete Document
+
+#### Request
+- Endpoint: DELETE: `/documents/:id`
+- Requires: Authentication and Admin Access Level or Owner access level
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+{
+  "success": true,
+  "message": "Document has been successfully deleted"
+}
+```
+
+### Search Documents
+
+#### Request
+- Endpoint: GET: `/documents/?query=searchQuery`
+- Requires: Authentication
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+{
+  "success": true,
+  "results": [{
+      "id": 1,
+      "title": "Integrated regional info-mediaries",
+      "content": "Voluptas et nostrum assumenda ea velit facere molestiae reprehenderit atque. Optio laboriosam harum. Aut ut nemo tenetur. Architecto praesentium aut at. Corrupti totam quo.",
+      "OwnerId": 3,
+      "access": "public",
+      "createdAt": "2017-03-06T12:02:27.902Z"
+    },
+    {
+      "id": 2,
+      "title": "we worship forever",
+      "content": "Reiciendis voluptate error voluptatem possimus dolores provident neque aut nemo. Ab in quia ut quos ipsum veritatis consequatur alias. Quae aut facilis.",
+      "OwnerId": 7,
+      "access": "public",
+      "createdAt": "2017-03-06T12:02:27.902Z"
+    }]
+}
+```
+
+### Get User Documents
+
+#### Request
+- Endpoint: GET: `/users/:UserId/documents/`. e.g `/users/2/documents`
+- Requires: Authentication
+
+#### Response
+- Status: `200: OK`
+- Body `(application/json)`
+```json
+[
+  {
+    "id": 1,
+    "title": "Integrated regional info-mediaries",
+    "content": "Voluptas et nostrum assumenda ea velit facere molestiae reprehenderit atque. Optio laboriosam harum. Aut ut nemo tenetur. Architecto praesentium aut at. Corrupti totam quo.",
+    "OwnerId": 2,
+    "access": "public",
+    "createdAt": "2017-03-06T12:02:27.902Z"
+  },
+  {
+    "id": 2,
+    "title": "we worship forever",
+    "content": "Reiciendis voluptate error voluptatem possimus dolores provident neque aut nemo. Ab in quia ut quos ipsum veritatis consequatur alias. Quae aut facilis.",
+    "OwnerId": 2,
+    "access": "public",
+    "createdAt": "2017-03-06T12:02:27.902Z"
+  }
+]
+```
+
 #### *Contributing*
 1. Fork this repository to your GitHub account
 2. Clone the forked repository
