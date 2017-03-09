@@ -135,13 +135,11 @@ describe('Users ==> \n', () => {
   });
 
   describe('Admin User', () => {
-    let adminToken;
     it('Should return http code 201 if an Admin User is successfully created',
       (done) => {
         client.post('/users')
           .send(testData.adminUser)
           .end((error, response) => {
-            adminToken = response.body.token;
             expect(response.status).to.equal(201);
             done();
           });

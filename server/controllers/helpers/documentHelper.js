@@ -1,6 +1,3 @@
-import db from '../../models';
-
-const Documents = db.documents;
 /**
  * Helper class for document controller
  */
