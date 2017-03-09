@@ -10,6 +10,7 @@ router.route('/')
   .get(Authenticator.authenticateUser, Authenticator.authenticateAdmin, RoleController.fetchRoles)
   .post(Authenticator.authenticateUser, Authenticator.authenticateAdmin, RoleController.createRole);
 router.route('/:id')
-  .delete(RoleController.deleteRole);
+  .delete(Authenticator.authenticateUser,
+    Authenticator.authenticateAdmin, RoleController.deleteRole);
 
 export default router;
