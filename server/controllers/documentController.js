@@ -1,4 +1,6 @@
+/* eslint import/no-unresolved: 0 */
 import db from '../models';
+import DocumentHelper from './helpers/documentHelper';
 
 const Documents = db.documents;
 const Users = db.users;
@@ -30,24 +32,43 @@ class DocumentController {
    */
   static createDocument(request, response) {
     if (DocumentController.postRequest(request)) {
-      Documents
-        .create({
-          title: request.body.title,
-          content: request.body.content,
-          access: request.body.access ? request.body.access : 'public',
+      Documents.findAll({
+        where: {
           OwnerId: request.decoded.UserId,
-        }).then((document) => {
-          response.status(201).send({
-            success: true,
-            message: 'Document successfully created',
-            document: document.dataValues
-          });
-        }).catch((error) => {
-          response.status(400).send({
+          $and: {
+            $or: [
+              { title: request.body.title },
+              { content: request.body.content }
+            ]
+          }
+        }
+      }).then((result) => {
+        if (result.length > 0) {
+          response.status(409).send({
             success: false,
-            message: error.message
+            message: 'You cannot create document, title and content of documents must be unique'
           });
-        });
+        } else {
+          Documents
+            .create({
+              title: request.body.title,
+              content: request.body.content,
+              access: request.body.access ? request.body.access : 'public',
+              OwnerId: request.decoded.UserId,
+            }).then((document) => {
+              response.status(201).send({
+                success: true,
+                message: 'Document successfully created',
+                document: document.dataValues
+              });
+            }).catch((error) => {
+              response.status(400).send({
+                success: false,
+                message: error.message
+              });
+            });
+        }
+      });
     } else {
       response.status(400).send({
         success: false,
@@ -114,7 +135,6 @@ class DocumentController {
       }
     });
   }
-
   /**
    * Fetch specific document in the database
    * Admin has access to all the documents
@@ -124,7 +144,7 @@ class DocumentController {
    * @return {Void} - returns Void
    */
   static fetchDocument(request, response) {
-    const searchQuery = request.query.search;
+    let searchQuery = request.query.search;
     const searchLimit = request.query.limit;
     const userId = request.decoded.UserId;
     let roleId;
@@ -138,12 +158,14 @@ class DocumentController {
           attributes: ['roleId']
         }]
       };
+      queryBuilder.offset = (request.query.offset > 0) ? request.query.offset : 0;
       if (searchLimit) {
         queryBuilder.limit = searchLimit;
       }
 
       if (roleId === 1) {
         if (searchQuery) {
+          searchQuery = DocumentHelper.sanitizeString(searchQuery);
           queryBuilder.where = {
             $or: [{
               title:
@@ -154,9 +176,9 @@ class DocumentController {
             }]
           };
         }
-        Documents.findAll(queryBuilder)
+        Documents.findAndCountAll(queryBuilder)
           .then((results) => {
-            if (results.length < 1) {
+            if (results.count < 1) {
               response.status(404).send({
                 success: false,
                 message: 'No Document Found'
@@ -170,6 +192,7 @@ class DocumentController {
           });
       } else {
         if (searchQuery) {
+          searchQuery = DocumentHelper.sanitizeString(searchQuery);
           queryBuilder.where = {
             $or: [
               { title: { $like: `%${searchQuery}%` } },
@@ -183,20 +206,27 @@ class DocumentController {
             }
           };
         }
-        Documents.findAll(queryBuilder).then((results) => {
-          const accessibleDocuments = results.filter((document) => {
-            if ((document.access === 'public') ||
-              (document.user.roleId === roleId
-                && document.access !== 'private')) {
+        Documents.findAndCountAll(queryBuilder).then((results) => {
+          const accessibleDocuments = results.rows.filter((document) => {
+            if ((document.dataValues.access === 'public') ||
+              (document.dataValues.user.roleId === roleId
+                && document.dataValues.access !== 'private')) {
               return true;
-            } else if (document.access === 'private' && document.OwnerId === userId) {
+            } else if (document.dataValues.access === 'private' && document.dataValues.OwnerId === userId) {
               return true;
             }
             return false;
           });
+
+          const offset = queryBuilder.offset;
+          const limit = queryBuilder.limit;
+
+          const pagination = DocumentHelper.paginateResult(accessibleDocuments, offset, limit);
+
           response.status(200).send({
             success: true,
-            results: accessibleDocuments
+            results: accessibleDocuments,
+            pagination
           });
         });
       }

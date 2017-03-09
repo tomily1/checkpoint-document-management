@@ -21,3 +21,6 @@
 1. Include how to send payload to api requests
 2. Search test should be sorted
 3. Production build should not run on babel-node
+4. Sanitize input for search documents, expect to contain expression
+5. Unique document for each user
+6. Offset for pagination

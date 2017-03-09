@@ -40,7 +40,7 @@ describe('Search', () => {
           .set({ 'x-access-token': adminUserToken })
           .end((error, response) => {
             expect(response.status).to.equal(200);
-            expect(response.body.results.length).to.equal(searchLimit);
+            expect(response.body.results.rows.length).to.equal(searchLimit);
             done();
           });
       });
@@ -53,7 +53,7 @@ describe('Search', () => {
         .end((error, response) => {
           expect(response.status).to.equal(200);
           let oldestDate = Date.now();
-          response.body.results.forEach((document) => {
+          response.body.results.rows.forEach((document) => {
             const createdDate = Date.parse(document.createdAt);
             expect(createdDate).to.be.lte(oldestDate);
             oldestDate = createdDate;
@@ -63,12 +63,12 @@ describe('Search', () => {
     });
 
   it('should return only documents that match a specific query', (done) => {
-    const searchText = testData.documentPublic1.title;
+    const searchText = 'e';
     client.get(`/documents/?search=${searchText}`)
       .set({ 'x-access-token': adminUserToken })
       .end((error, response) => {
         expect(response.status).to.equal(200);
-        response.body.results.forEach((document) => {
+        response.body.results.rows.forEach((document) => {
           expect(document.title).to.contain(searchText) ||
             expect(document.content).to.contain(searchText);
         });
@@ -77,15 +77,15 @@ describe('Search', () => {
   });
   it('should return documents limited by a specified number with result containing the search terms', (done) => {
     const searchLimit = 1;
-    const query = testData.documentPublic1.title.split(' ')[0];
+    const query = 'a';
     client.get(`/documents/?search=${query}&limit=${searchLimit}`)
       .set({ 'x-access-token': adminUserToken })
       .end((error, response) => {
         expect(response.status).to.equal(200);
-        response.body.results.forEach((document) => {
+        response.body.results.rows.forEach((document) => {
           expect(document.title).to.contain(query) || expect(document.content).to.contain(query);
         });
-        expect(response.body.results.length).to.equal(searchLimit);
+        expect(response.body.results.rows.length).to.equal(searchLimit);
         done();
       });
   });
