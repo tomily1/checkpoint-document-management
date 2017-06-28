@@ -25,4 +25,3 @@ const Header = () => {
 };
 
 export default Header;
-/* <div id="wrapper"> */

@@ -25,7 +25,6 @@ class DocumentPage extends React.Component {
    */
   onTitleChange(event) {
     const document = this.state.document;
-    // console.log(document);
     document.title = event.target.value;
     this.setState({ document: document });
   }
@@ -33,18 +32,16 @@ class DocumentPage extends React.Component {
    * 
    */
   onClickSave() {
-    // console.log(documentActions.createDocuments(this.state.document));
     this.props.actions.createDocuments(this.state.document);
   }
+
   documentRow(document, index) {
-    console.log(document.title);
     return <div key={index}>{document.title}</div>;
   }
   /**
    * 
    */
   render() {
-    // console.log(this.props.dispatch);
     return (
       <div className="create-document">
         <h1>Documents</h1>
@@ -95,5 +92,5 @@ const mapDispatchToProps = (dispatch) => {
     actions: bindActionCreators(documentActions, dispatch) // document => dispatch(documentActions.createDocuments(document))
   };
 };
-// const connectStateAndProps = connect(mapStateToProps);
+
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentPage);
