@@ -1,5 +1,7 @@
 import React from 'react';
+import update from 'react-addons-update';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import * as userActions from '../../actions/userActions';
 
@@ -8,11 +10,13 @@ class SignupPage extends React.Component {
   constructor(props, context){
     super(props, context);
     this.state = {
+      user: {
         'firstname': '',
         'lastname': '',
         'username': '',
         'email': '',
         'password': ''
+      }
     };
     this.onClickRegister = this.onClickRegister.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -20,13 +24,13 @@ class SignupPage extends React.Component {
 
   onClickRegister(event){
     event.preventDefault();
-    console.log(this.state);
-    this.props.actions.createUserDispatcher(this.state);
+    this.props.actions.createUserDispatcher(this.state.user);
+    browserHistory.push('/dashboard');
   }
 
   onChange(e) {
     this.setState ({
-      [e.target.name]: e.target.value
+      user: update(this.state.user, {[e.target.name]: {$set: e.target.value}})
     })
   }
 

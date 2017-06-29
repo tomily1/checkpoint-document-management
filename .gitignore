@@ -5,3 +5,5 @@ npm-debug.log
 dist/**/*.js
 .vscode
 .DS_Store
+.idea/
+.idea/*

@@ -1,6 +1,31 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+import { bindActionCreators } from 'redux';
+import * as userActions from '../../actions/userActions';
 
 class LoginPage extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      email: '',
+      password: ''
+    }
+    this.onClickLogin = this.onClickLogin.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+  onChange(e) {
+    this.setState ({
+      [e.target.name] : e.target.value
+    })
+  }
+
+  onClickLogin(event) {
+    event.preventDefault();
+    console.log('submitted');
+    this.props.actions.loginUserDispatcher(this.state);
+  }
+
   render() {
     return (
       <div className="jumbotron text-center">
@@ -15,7 +40,7 @@ class LoginPage extends React.Component {
       <div className="container">
         <div className="z-depth-1 grey lighten-4 logform row">
 
-          <form className="col s12" method="post">
+          <form className="col s12" onSubmit={this.onClickLogin}>
             <div className="row">
               <div className="col s12">
               </div>
@@ -23,14 +48,14 @@ class LoginPage extends React.Component {
 
             <div className="row">
               <div className="input-field col s12">
-                <input className="validate" type="email" name="email" id="email" />
+                <input className="validate" type="email" name="email" id="email" onChange={this.onChange}/>
                 <label htmlFor="email">Enter your email</label>
               </div>
             </div>
 
             <div className="row">
               <div className="input-field col s12">
-                <input className="validate" type="password" name="password" id="password" />
+                <input className="validate" type="password" name="password" id="password" onChange={this.onChange}/>
                 <label htmlFor="password">Enter your password</label>
               </div>
               <label className="forgot">
@@ -41,7 +66,7 @@ class LoginPage extends React.Component {
             <br />
             <center>
               <div className='row'>
-                <button type='submit' name='btn_login' className='col s12 btn btn-large waves-effect indigo'>Login</button>
+                <button type='submit' name='btn_login' id="login-btn" className='col s12 btn btn-large waves-effect indigo'>Login</button>
               </div>
             </center>
           </form>
@@ -56,4 +81,14 @@ class LoginPage extends React.Component {
     );
   }
 }
-export default LoginPage;
+const mapStateToProps = (state) => {
+  return {
+    user: state
+  }
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(userActions, dispatch)
+  }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
