@@ -28,9 +28,12 @@ h1 {
 .nav-edge {
   float: right;
   margin-right: 15px;
-  /*display: inline-block !important;*/
+  /*margin-top: -73px !important;*/
+    /*display: inline-block !important;*/
 }
-
+.logged-out {
+  margin-top: -73px !important;
+}
 /* Create Document Styles */
 .document-title {
   color: #fff;
@@ -208,4 +211,7 @@ nav {
   left: 4%;
   margin-top: 60px;
   color: #fff;
+}
+.login {
+  margin-top: 10px;
 }
