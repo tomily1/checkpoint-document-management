@@ -6,6 +6,10 @@ export default function userReducer(state = [], action) {
       return [...state,
         Object.assign({}, action.user)
       ];
+    case types.SIGN_IN:
+      return [...state,
+        Object.assign({}, action.user)
+      ];
     default:
       return state;
   }

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as documentActions from '../../actions/documentActions';
 import Editor from './documentEditor';
+import update from 'react-addons-update';
 
 /**
  * 
@@ -15,10 +16,14 @@ class DocumentPage extends React.Component {
     super(props, context);
 
     this.state = {
-      document: { title: '' }
+      document: {
+        title: '',
+        access: '',
+        content: ''
+      }
     };
     this.onTitleChange = this.onTitleChange.bind(this);
-    this.onClickSave = this.onClickSave.bind(this);
+    this.handleEditorSubmit = this.handleEditorSubmit.bind(this);
   }
   /**
    * 
@@ -26,17 +31,16 @@ class DocumentPage extends React.Component {
   onTitleChange(event) {
     const document = this.state.document;
     document.title = event.target.value;
-    this.setState({ document: document });
+    this.setState({
+      document: update(this.state.document, {title: {$set: event.target.value}})
+    });
+    console.log(this.state);
   }
   /**
    * 
    */
-  onClickSave() {
+  handleEditorSubmit() {
     this.props.actions.createDocuments(this.state.document);
-  }
-
-  documentRow(document, index) {
-    return <div key={index}>{document.title}</div>;
   }
   /**
    * 
@@ -44,13 +48,11 @@ class DocumentPage extends React.Component {
   render() {
     return (
       <div className="create-document">
-        <h1>Documents</h1>
-        {this.props.documents.map(this.documentRow)}
         <h2>Add Document</h2>
         <div className="document-title">
           <input
             type="text"
-            placeholder="title"
+            placeholder="Title"
             onChange={this.onTitleChange}
             value={this.state.document.title}
           />
@@ -64,13 +66,9 @@ class DocumentPage extends React.Component {
             </select>
           </div>
         </div>
-        <input
-          type="submit"
-          value="save"
-          onClick={this.onClickSave}
-        />
         <script src="//cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>
-        <Editor />
+        <Editor onSubmit={this.handleEditorSubmit}/>
+        <button className="btn waves-effect waves-light waves-teal" type="submit">Send<i className="material-icons right">send</i></button>
       </div>
     );
   }
